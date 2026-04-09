@@ -2069,22 +2069,30 @@
     setTimeout(() => checkTheme(lat, lng, true), minsUntil * 60 * 1000);
   }
 
-  // Try geolocation; fall back to timezone-based estimate
+  // IP-based geolocation fallback (no permission needed)
+  async function ipFallback() {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const d   = await res.json();
+      if (d.latitude && d.longitude) {
+        checkTheme(d.latitude, d.longitude, false);
+        return;
+      }
+    } catch (_) {}
+    // Last resort: timezone offset estimate
+    const offset = -new Date().getTimezoneOffset() / 60;
+    checkTheme(offset * 4, offset * 15, false);
+  }
+
+  // Try precise geolocation first; fall back to IP lookup
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       pos => checkTheme(pos.coords.latitude, pos.coords.longitude, false),
-      () => {
-        // Fallback: estimate lat/lng from UTC offset
-        const offset = -new Date().getTimezoneOffset() / 60;
-        const lat = offset * 4; // rough lat estimate
-        const lng = offset * 15;
-        checkTheme(lat, lng, false);
-      },
-      { timeout: 4000 }
+      () => ipFallback(),
+      { timeout: 5000 }
     );
   } else {
-    const offset = -new Date().getTimezoneOffset() / 60;
-    checkTheme(offset * 4, offset * 15, false);
+    ipFallback();
   }
 
   // ── CALENDLY URL — replace with your actual link once set up ──
