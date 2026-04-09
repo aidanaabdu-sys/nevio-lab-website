@@ -281,13 +281,49 @@
     html.light .btn-primary svg path { stroke: #fff; }
     html.light .logo-name span { color: var(--orange); }
 
+    /* Header sits over dark hero in light mode — keep it white until scrolled */
+    html.light header:not(.scrolled) {
+      color: #ffffff;
+    }
+    html.light header:not(.scrolled) .logo-name,
+    html.light header:not(.scrolled) nav a:not(.nav-cta) {
+      color: rgba(255,255,255,0.75);
+    }
+    html.light header:not(.scrolled) .logo-name span { color: #F0861B; }
+    html.light header:not(.scrolled) .logo-mark { color: #ffffff; }
+    html.light header:not(.scrolled) .nav-cta {
+      background: rgba(255,255,255,0.1) !important;
+      border-color: rgba(255,255,255,0.2) !important;
+      color: #ffffff !important;
+    }
+
     html.light body { background: #F2EFEB; }
-    html.light .hero-title { color: #0A0A0A; }
-    html.light .hero-title em { color: #E84F00; }
-    html.light .final-cta h2 { color: #0A0A0A; }
-    html.light .final-cta h2 em { color: #E84F00; }
+
+    /* Hero + Final CTA stay dark in light mode so true brand orange #F0861B always shows */
+    html.light .hero {
+      background: #0a0a0a;
+      --orange: #F0861B;
+    }
+    html.light .hero-title { color: #ffffff; }
+    html.light .hero-title em { color: #F0861B; }
+    html.light .hero-eyebrow { color: #F0861B; }
+    html.light .hero-desc { color: rgba(255,255,255,0.7); }
+    html.light .hero-note { color: rgba(255,255,255,0.38); }
+    html.light .hero-grid {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px) !important;
+    }
+
+    html.light .final-cta {
+      background: #0a0a0a;
+      --orange: #F0861B;
+    }
+    html.light .final-cta h2 { color: #ffffff; }
+    html.light .final-cta h2 em { color: #F0861B; }
+    html.light .final-cta p { color: rgba(255,255,255,0.55); }
     html.light .problem-statement em { color: rgba(0,0,0,0.4); }
-    html.light .sphere { opacity: 0.35; }
+    /* sphere stays visible on dark hero in both modes */
     html.light .nav-cta {
       background: rgba(0,0,0,0.07) !important;
       border-color: rgba(0,0,0,0.12) !important;
@@ -299,11 +335,6 @@
     }
     html.light header.scrolled {
       background: rgba(242,239,235,0.82) !important;
-    }
-    html.light .hero-grid {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
     }
 
     /* Theme indicator pill */
