@@ -489,6 +489,14 @@
     }
 
     nav a:hover { color: var(--white); }
+    nav a.nav-active {
+      color: var(--white);
+      background: rgba(255,255,255,0.07);
+    }
+    html.light nav a.nav-active {
+      color: var(--text);
+      background: rgba(0,0,0,0.06);
+    }
 
     .nav-cta {
       font-size: 14px;
@@ -2158,6 +2166,29 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeModal();
   });
+
+  // ── SCROLLSPY — highlight nav link for current section ──
+  const navLinks = document.querySelectorAll('nav a[href^="#"]:not(.nav-cta)');
+  const spySections = Array.from(navLinks).map(link => ({
+    link,
+    section: document.querySelector(link.getAttribute('href'))
+  })).filter(({ section }) => section);
+
+  function updateActiveNav() {
+    const scrollMid = window.scrollY + window.innerHeight * 0.4;
+    let active = null;
+    spySections.forEach(({ section }) => {
+      if (section.offsetTop <= scrollMid) active = section;
+    });
+    navLinks.forEach(link => link.classList.remove('nav-active'));
+    if (active) {
+      const match = spySections.find(({ section }) => section === active);
+      if (match) match.link.classList.add('nav-active');
+    }
+  }
+
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  updateActiveNav();
 
   // ── CUSTOM CURSOR ──
   const cursorDot  = document.getElementById('cursor-dot');
