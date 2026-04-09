@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nevio Lab — Driver Acquisition for Trucking Companies</title>
+  <meta name="description" content="We build predictable CDL driver acquisition systems for trucking companies. Less wasted spend. More drivers who actually respond." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ── GRAPHIC ELEMENTS ── */
+
+    /* Road perspective grid in hero */
+    .hero-road {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100%; height: 60%;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0.18;
+      mask-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+
+    html.light .hero-road { opacity: 0.08; }
+
+    .hero-road svg { width: 100%; height: 100%; }
+
+    /* Large watermark orbit behind sections */
+    .orbit-watermark {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.04;
+      z-index: 0;
+    }
+
+    html.light .orbit-watermark { opacity: 0.06; }
+
+    /* Dot grid pattern */
+    .dot-grid {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    html.light .dot-grid { opacity: 0.25; }
+
+    /* Signal wave divider */
+    .wave-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    html.light .wave-divider { opacity: 0.08; }
+
+    /* Truck silhouette watermark */
+    .truck-mark {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.03;
+      z-index: 0;
+    }
+
+    html.light .truck-mark { opacity: 0.04; }
+
+    /* Keep section content above decorations */
+    .section > .container,
+    .section-sm > .container { position: relative; z-index: 1; }
+
+    /* ── INTAKE MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal-card {
+      background: var(--near-black);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 48px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    }
+    .modal-overlay.open .modal-card {
+      transform: translateY(0) scale(1);
+    }
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 32px; height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .modal-close:hover { border-color: var(--text-2); color: var(--text); }
+    .modal-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 12px;
+    }
+    .modal-title {
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .modal-sub {
+      font-size: 14px;
+      color: var(--text-2);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .modal-field {
+      margin-bottom: 16px;
+    }
+    .modal-field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 8px;
+    }
+    .modal-field input,
+    .modal-field select {
+      width: 100%;
+      background: var(--dark);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .modal-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='rgba(255,255,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+    html.light .modal-field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='rgba(0,0,0,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+    .modal-field input:focus,
+    .modal-field select:focus {
+      border-color: var(--orange);
+    }
+    .modal-field input::placeholder { color: var(--text-3); }
+    .modal-field select option { background: #1a1a1a; color: #fff; }
+    .modal-submit {
+      width: 100%;
+      margin-top: 8px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 24px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .modal-submit:hover { opacity: 0.88; transform: scale(0.99); }
+    .modal-submit:active { transform: scale(0.97); }
+    .modal-note {
+      font-size: 12px;
+      color: var(--text-3);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+    /* Success state */
+    .modal-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      padding: 24px 0;
+    }
+    .modal-success.show { display: flex; }
+    .modal-form-body.hide { display: none; }
+    .success-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(255,92,0,0.12);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .success-icon svg { color: var(--orange); }
+    @media (max-width: 540px) {
+      .modal-card { padding: 32px 24px; }
+    }
+
+    /* ── THEME TRANSITION ── */
+    html { transition: background 1.2s ease, color 1.2s ease; }
+    *, *::before, *::after { transition: background-color 1.2s ease, border-color 1.2s ease, color 1.2s ease; }
+
+    /* ── DARK MODE (default) ── */
+    :root {
+      --orange: #FF5C00;
+      --orange-dim: rgba(255,92,0,0.12);
+      --white: #ffffff;
+      --off-white: #f5f5f5;
+      --black: #000000;
+      --near-black: #0a0a0a;
+      --dark: #111111;
+      --mid: #1a1a1a;
+      --line: rgba(255,255,255,0.08);
+      --text: #ffffff;
+      --text-2: rgba(255,255,255,0.5);
+      --text-3: rgba(255,255,255,0.25);
+      --r: 16px;
+    }
+
+    /* ── LIGHT MODE (daytime) ── */
+    html.light {
+      --orange: #E84F00;
+      --white: #0A0A0A;
+      --black: #F2EFEB;
+      --near-black: #EAE7E2;
+      --dark: #E0DDD9;
+      --mid: #D4D1CD;
+      --line: rgba(0,0,0,0.09);
+      --text: #0A0A0A;
+      --text-2: rgba(0,0,0,0.45);
+      --text-3: rgba(0,0,0,0.22);
+    }
+
+    /* Elements that must stay white regardless of theme */
+    html.light .btn-primary { color: #fff; }
+    html.light .btn-primary svg path { stroke: #fff; }
+    html.light .logo-name span { color: var(--orange); }
+
+    html.light body { background: #F2EFEB; }
+    html.light .hero-title { color: #0A0A0A; }
+    html.light .hero-title em { color: #E84F00; }
+    html.light .final-cta h2 { color: #0A0A0A; }
+    html.light .final-cta h2 em { color: #E84F00; }
+    html.light .problem-statement em { color: rgba(0,0,0,0.4); }
+    html.light .sphere { opacity: 0.35; }
+    html.light .nav-cta {
+      background: rgba(0,0,0,0.07) !important;
+      border-color: rgba(0,0,0,0.12) !important;
+      color: #0A0A0A !important;
+    }
+    html.light .btn-audit {
+      background: #0A0A0A !important;
+      color: #fff !important;
+    }
+    html.light header.scrolled {
+      background: rgba(242,239,235,0.82) !important;
+    }
+    html.light .hero-grid {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    }
+
+    /* Theme indicator pill */
+    .theme-pill {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      background: var(--near-black);
+      border: 1px solid var(--line);
+      padding: 8px 14px;
+      border-radius: 100px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s, transform 0.4s, background 1.2s, color 1.2s, border-color 1.2s;
+    }
+    .theme-pill.visible { opacity: 1; transform: translateY(0); }
+    .theme-pill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--black);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1;
+    }
+
+    img, svg { display: block; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── TYPOGRAPHY SYSTEM ── */
+    .t-display {
+      font-size: clamp(56px, 9vw, 120px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+    }
+
+    .t-h1 {
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 300;
+      letter-spacing: -0.035em;
+      line-height: 1;
+    }
+
+    .t-h2 {
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+
+    .t-h3 {
+      font-size: clamp(20px, 2vw, 28px);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .t-body {
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.7;
+      color: var(--text-2);
+    }
+
+    .t-small {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .t-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .section {
+      padding: 160px 0;
+    }
+
+    .section-sm {
+      padding: 100px 0;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      transition: background 0.5s, border-color 0.5s;
+    }
+
+    header.scrolled {
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-name {
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+
+    .logo-name span { color: var(--orange); }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    nav a {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--white); }
+
+    .nav-cta {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white) !important;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 8px 18px !important;
+      border-radius: 8px;
+      transition: background 0.2s, border-color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: rgba(255,255,255,0.12) !important;
+      border-color: rgba(255,255,255,0.2) !important;
+      color: var(--white) !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* Gradient spheres */
+    .sphere {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+    }
+
+    .sphere-1 {
+      width: 70vw;
+      height: 70vw;
+      background: radial-gradient(circle, rgba(255,92,0,0.2) 0%, transparent 65%);
+      top: -20vw;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: drift1 20s ease-in-out infinite;
+    }
+
+    .sphere-2 {
+      width: 40vw;
+      height: 40vw;
+      background: radial-gradient(circle, rgba(255,140,60,0.12) 0%, transparent 65%);
+      bottom: 10%;
+      right: -10%;
+      animation: drift2 25s ease-in-out infinite;
+    }
+
+    .sphere-3 {
+      width: 30vw;
+      height: 30vw;
+      background: radial-gradient(circle, rgba(255,92,0,0.08) 0%, transparent 65%);
+      top: 40%;
+      left: -5%;
+      animation: drift3 18s ease-in-out infinite;
+    }
+
+    @keyframes drift1 {
+      0%,100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.1) translateY(-3%); }
+    }
+    @keyframes drift2 {
+      0%,100% { transform: scale(1) translate(0,0); }
+      50% { transform: scale(1.2) translate(-3%, 3%); }
+    }
+    @keyframes drift3 {
+      0%,100% { transform: scale(1) translate(0,0); }
+      50% { transform: scale(0.9) translate(4%, -4%); }
+    }
+
+    /* Grid */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 100% 80% at 50% 0%, black 0%, transparent 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 48px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-title {
+      font-size: clamp(64px, 10vw, 136px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      color: var(--white);
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--orange);
+    }
+
+    .hero-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-desc {
+      max-width: 400px;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.65;
+      color: var(--text-2);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--orange);
+      color: var(--black);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 14px 28px;
+      border-radius: 100px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary svg { transition: transform 0.2s; }
+    .btn-primary:hover svg { transform: translateX(3px); }
+
+    .hero-note {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-3);
+      text-align: right;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── TICKER ── */
+    .ticker {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 16px 0;
+      overflow: hidden;
+      background: var(--near-black);
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 0;
+      animation: ticker 40s linear infinite;
+      width: max-content;
+    }
+
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 0 48px;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .ticker-dot {
+      width: 3px;
+      height: 3px;
+      background: var(--orange);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker {
+      to { transform: translateX(-50%); }
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .stat {
+      padding: 64px 48px;
+      border-right: 1px solid var(--line);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-number {
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .stat-number .unit {
+      font-size: 0.55em;
+      color: var(--orange);
+      vertical-align: super;
+      font-weight: 400;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    /* ── PROBLEM ── */
+    .problem-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+      margin-bottom: 100px;
+    }
+
+    .problem-statement {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--white);
+    }
+
+    .problem-statement em {
+      font-style: italic;
+      color: var(--text-2);
+    }
+
+    .problem-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .problem-item {
+      background: var(--near-black);
+      padding: 40px;
+      transition: background 0.25s;
+    }
+
+    .problem-item:hover { background: var(--dark); }
+
+    .problem-item-num {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      margin-bottom: 24px;
+    }
+
+    .problem-item h3 {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .problem-item p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ── SERVICES ── */
+    .services-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+      margin-bottom: 80px;
+    }
+
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .service {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      gap: 32px;
+      align-items: start;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--line);
+      transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: default;
+    }
+
+    .service:hover { padding-left: 16px; }
+
+    .service-index {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-3);
+      padding-top: 4px;
+    }
+
+    .service-body h3 {
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .service-body p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    .service-tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+      max-width: 200px;
+      padding-top: 4px;
+    }
+
+    .pill {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: var(--orange);
+      padding: 4px 10px;
+      border: 1px solid rgba(255,92,0,0.35);
+      border-radius: 100px;
+      white-space: nowrap;
+      background: rgba(255,92,0,0.06);
+      box-shadow: 0 0 8px rgba(255,92,0,0.2), inset 0 0 6px rgba(255,92,0,0.04);
+      transition: box-shadow 0.3s, border-color 0.3s;
+    }
+
+    .pill:hover {
+      box-shadow: 0 0 16px rgba(255,92,0,0.4), inset 0 0 8px rgba(255,92,0,0.08);
+      border-color: rgba(255,92,0,0.6);
+    }
+
+    html.light .pill {
+      box-shadow: 0 0 6px rgba(232,79,0,0.15);
+    }
+
+    /* ── PROCESS ── */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      overflow: hidden;
+      margin-top: 80px;
+    }
+
+    .process-step {
+      background: var(--near-black);
+      padding: 48px 36px;
+      position: relative;
+      transition: background 0.25s;
+    }
+
+    .process-step:hover { background: var(--dark); }
+
+    .process-step::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .process-step:hover::before { transform: scaleX(1); }
+
+    .process-num {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 32px;
+    }
+
+    .process-step h3 {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .process-step p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ── WHY / AUDIT ── */
+    .why-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 120px;
+      align-items: start;
+    }
+
+    .why-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 48px;
+      border-top: 1px solid var(--line);
+    }
+
+    .why-item {
+      display: flex;
+      gap: 20px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: flex-start;
+    }
+
+    .why-icon {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      margin-top: 3px;
+    }
+
+    .why-item h4 {
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .why-item p {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* Audit card */
+    .audit-card {
+      position: sticky;
+      top: 88px;
+      background: var(--near-black);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 56px 48px;
+      overflow: hidden;
+    }
+
+    .audit-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: 0.6;
+    }
+
+    .audit-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 24px;
+    }
+
+    .audit-card h2 {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+
+    .audit-card > p {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.65;
+      margin-bottom: 40px;
+    }
+
+    .audit-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .audit-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .audit-item-dot {
+      width: 5px;
+      height: 5px;
+      min-width: 5px;
+      background: var(--orange);
+      border-radius: 50%;
+      margin-top: 6px;
+    }
+
+    .btn-audit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+      padding: 16px 24px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-audit:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    .audit-sub {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-3);
+    }
+
+    .audit-sub strong {
+      color: var(--orange);
+      font-weight: 500;
+    }
+
+    /* ── TESTIMONIALS ── */
+    .t-layout {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 80px;
+    }
+
+    .t-card {
+      background: var(--near-black);
+      border: 1px solid var(--line);
+      border-radius: var(--r);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .t-card:hover {
+      border-color: rgba(255,92,0,0.2);
+      transform: translateY(-3px);
+    }
+
+    .t-quote {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--text-2);
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 32px;
+      font-style: italic;
+    }
+
+    .t-sep {
+      width: 24px;
+      height: 1px;
+      background: var(--line);
+      margin-bottom: 24px;
+    }
+
+    .t-author-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .t-author-co {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-3);
+    }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta-glow {
+      position: absolute;
+      bottom: -40%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80vw;
+      height: 80vw;
+      background: radial-gradient(circle, rgba(255,92,0,0.1) 0%, transparent 65%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+
+    .final-cta-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .final-cta h2 {
+      font-size: clamp(48px, 8vw, 108px);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 40px;
+    }
+
+    .final-cta h2 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .final-cta p {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--text-2);
+      max-width: 400px;
+      margin: 0 auto 48px;
+      line-height: 1.65;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 40px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-3);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-3);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── REVEAL ANIMATION ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.12s; }
+    .reveal-d2 { transition-delay: 0.24s; }
+    .reveal-d3 { transition-delay: 0.36s; }
+    .reveal-d4 { transition-delay: 0.48s; }
+
+    /* ── CUSTOM CURSOR (desktop only) ── */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none !important; }
+      .cursor-dot {
+        position: fixed; top: 0; left: 0;
+        width: 6px; height: 6px;
+        background: var(--orange);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        transform: translate(-50%, -50%);
+        transition: transform 0.08s ease, opacity 0.3s;
+        will-change: transform;
+      }
+      .cursor-ring {
+        position: fixed; top: 0; left: 0;
+        width: 36px; height: 36px;
+        border: 1px solid rgba(255, 92, 0, 0.45);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition: width 0.35s ease, height 0.35s ease, border-color 0.35s ease, opacity 0.3s;
+        will-change: transform;
+      }
+      .cursor-ring.hover {
+        width: 56px; height: 56px;
+        border-color: rgba(255, 92, 0, 0.25);
+      }
+      .cursor-dot.hidden, .cursor-ring.hidden { opacity: 0; }
+    }
+
+    /* ── SCROLL PROGRESS ── */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: var(--orange);
+      z-index: 10001;
+      pointer-events: none;
+    }
+
+    /* ── WORD SPLIT ANIMATION ── */
+    .split-word {
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+      padding-bottom: 0.18em;
+      margin-bottom: -0.18em;
+    }
+    .split-word-inner {
+      display: inline-block;
+      transform: translateY(110%);
+      transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      padding-bottom: 0.05em;
+    }
+    .split-active .split-word-inner { transform: translateY(0); }
+
+    /* ── MARQUEE TICKER ── */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 20px 0;
+      white-space: nowrap;
+      position: relative;
+    }
+    .marquee-track {
+      display: inline-flex;
+      gap: 0;
+      animation: marquee-scroll 28s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      padding: 0 40px;
+    }
+    .marquee-item span {
+      color: var(--orange);
+      font-size: 10px;
+    }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      .container { padding: 0 24px; }
+      .nav-inner { padding: 0 24px; }
+      nav a:not(.nav-cta) { display: none; }
+      .hero { padding-bottom: 56px; }
+      .hero-content { padding: 0 24px; }
+      .hero-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
+      .hero-actions { align-items: flex-start; }
+      .hero-note { text-align: left; }
+      .stats { grid-template-columns: 1fr; }
+      .stat { border-right: none; border-bottom: 1px solid var(--line); padding: 40px 24px; }
+      .stat:last-child { border-bottom: none; }
+      .problem-header { grid-template-columns: 1fr; gap: 48px; }
+      .problem-items { grid-template-columns: 1fr; }
+      .services-intro { grid-template-columns: 1fr; gap: 32px; }
+      .service { grid-template-columns: 32px 1fr; }
+      .service-tags-wrap { display: none; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .why-layout { grid-template-columns: 1fr; gap: 64px; }
+      .audit-card { position: static; padding: 40px 32px; }
+      .t-layout { grid-template-columns: 1fr; }
+      .final-cta h2 { font-size: clamp(40px, 10vw, 80px); }
+      .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
+      .section { padding: 100px 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <svg class="logo-mark" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="12.5" stroke="white" stroke-width="1"/>
+        <ellipse cx="14" cy="14" rx="7" ry="4.5" stroke="#FF5C00" stroke-width="1" transform="rotate(-35 14 14)"/>
+        <circle cx="14" cy="14" r="2" fill="#FF5C00"/>
+      </svg>
+      <span class="logo-name">nevio<span>lab</span></span>
+    </a>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#why">About</a>
+      <a href="#contact" class="nav-cta">Free Audit</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-canvas">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+    <div class="sphere sphere-3"></div>
+    <div class="hero-grid"></div>
+
+    <!-- Road perspective grid -->
+    <div class="hero-road">
+      <svg viewBox="0 0 1440 600" preserveAspectRatio="xMidYMax slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Vanishing point perspective road lines -->
+        <line x1="720" y1="0" x2="0" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <line x1="720" y1="0" x2="240" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <line x1="720" y1="0" x2="480" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <line x1="720" y1="0" x2="600" y2="600" stroke="#FF5C00" stroke-width="1.5"/>
+        <line x1="720" y1="0" x2="660" y2="600" stroke="#FF5C00" stroke-width="2"/>
+        <line x1="720" y1="0" x2="720" y2="600" stroke="#FF5C00" stroke-width="2.5"/>
+        <line x1="720" y1="0" x2="780" y2="600" stroke="#FF5C00" stroke-width="2"/>
+        <line x1="720" y1="0" x2="840" y2="600" stroke="#FF5C00" stroke-width="1.5"/>
+        <line x1="720" y1="0" x2="960" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <line x1="720" y1="0" x2="1200" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <line x1="720" y1="0" x2="1440" y2="600" stroke="#FF5C00" stroke-width="1"/>
+        <!-- Horizontal crosslines (distance markers) -->
+        <line x1="468" y1="200" x2="972" y2="200" stroke="#FF5C00" stroke-width="0.5" opacity="0.6"/>
+        <line x1="324" y1="340" x2="1116" y2="340" stroke="#FF5C00" stroke-width="0.5" opacity="0.5"/>
+        <line x1="144" y1="480" x2="1296" y2="480" stroke="#FF5C00" stroke-width="0.5" opacity="0.4"/>
+        <line x1="0" y1="560" x2="1440" y2="560" stroke="#FF5C00" stroke-width="0.5" opacity="0.3"/>
+        <!-- Center dashes -->
+        <line x1="720" y1="60" x2="720" y2="100" stroke="#FF5C00" stroke-width="1.5" stroke-dasharray="4 8"/>
+        <line x1="714" y1="130" x2="726" y2="160" stroke="#FF5C00" stroke-width="1.5" stroke-dasharray="4 10"/>
+        <line x1="708" y1="195" x2="732" y2="235" stroke="#FF5C00" stroke-width="1.5" stroke-dasharray="4 12"/>
+        <line x1="700" y1="270" x2="740" y2="320" stroke="#FF5C00" stroke-width="1.5" stroke-dasharray="5 14"/>
+        <line x1="690" y1="360" x2="750" y2="420" stroke="#FF5C00" stroke-width="2" stroke-dasharray="6 16"/>
+        <line x1="676" y1="455" x2="764" y2="530" stroke="#FF5C00" stroke-width="2" stroke-dasharray="8 18"/>
+      </svg>
+    </div>
+
+    <!-- Large orbit watermark top-right -->
+    <div class="orbit-watermark" style="top:-100px;right:-100px;width:500px;height:500px;">
+      <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="250" cy="250" r="230" stroke="#FF5C00" stroke-width="1"/>
+        <ellipse cx="250" cy="250" rx="130" ry="80" stroke="#FF5C00" stroke-width="1" transform="rotate(-35 250 250)"/>
+        <ellipse cx="250" cy="250" rx="180" ry="60" stroke="#FF5C00" stroke-width="0.5" transform="rotate(20 250 250)"/>
+        <circle cx="250" cy="250" r="18" fill="#FF5C00"/>
+        <circle cx="250" cy="250" r="30" stroke="#FF5C00" stroke-width="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">Marketing Agency for Trucking</p>
+    <h1 class="hero-title">Everything your<br />business <em>needs.</em></h1>
+
+    <div class="hero-bottom">
+      <p class="hero-desc">Full-service marketing built for the trucking industry. Ads, content, automation, video, and websites — all under one roof. You run the business. We grow it.</p>
+      <div class="hero-actions">
+        <button onclick="openModal()" class="btn-primary" style="border:none;cursor:pointer;font-family:inherit">
+          Get Free Strategy Call
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <p class="hero-note">No cost &nbsp;·&nbsp; No commitment &nbsp;·&nbsp; 48h delivery</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item"><span class="ticker-dot"></span>Full-Service Marketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Lead Generation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Social Media Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AI + Automation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Video Production</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Website Creation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Built for Trucking</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Results-Driven</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Full-Service Marketing</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Lead Generation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Social Media Management</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>AI + Automation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Video Production</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Website Creation</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Built for Trucking</span>
+    <span class="ticker-item"><span class="ticker-dot"></span>Results-Driven</span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats reveal">
+  <div class="stat">
+    <div class="stat-number" data-target="6" data-suffix=" services">6 services</div>
+    <div class="stat-label">Strategy to execution —<br />all under one roof</div>
+  </div>
+  <div class="stat reveal reveal-d1">
+    <div class="stat-number" data-target="100" data-suffix="%">100%</div>
+    <div class="stat-label">Trucking-focused —<br />no generic marketing</div>
+  </div>
+  <div class="stat reveal reveal-d2">
+    <div class="stat-number" data-target="30" data-suffix=" days">30 days</div>
+    <div class="stat-label">To first measurable<br />results after launch</div>
+  </div>
+</div>
+
+<!-- MARQUEE TICKER -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <!-- Two copies for seamless loop -->
+    <span class="marquee-item">Driver Acquisition <span>✦</span></span>
+    <span class="marquee-item">Paid Ads <span>✦</span></span>
+    <span class="marquee-item">Social Media <span>✦</span></span>
+    <span class="marquee-item">Lead Generation <span>✦</span></span>
+    <span class="marquee-item">Video Production <span>✦</span></span>
+    <span class="marquee-item">AI Automation <span>✦</span></span>
+    <span class="marquee-item">Website Design <span>✦</span></span>
+    <span class="marquee-item">Full-Service Marketing <span>✦</span></span>
+    <span class="marquee-item">Trucking Industry <span>✦</span></span>
+    <span class="marquee-item">Driver Acquisition <span>✦</span></span>
+    <span class="marquee-item">Paid Ads <span>✦</span></span>
+    <span class="marquee-item">Social Media <span>✦</span></span>
+    <span class="marquee-item">Lead Generation <span>✦</span></span>
+    <span class="marquee-item">Video Production <span>✦</span></span>
+    <span class="marquee-item">AI Automation <span>✦</span></span>
+    <span class="marquee-item">Website Design <span>✦</span></span>
+    <span class="marquee-item">Full-Service Marketing <span>✦</span></span>
+    <span class="marquee-item">Trucking Industry <span>✦</span></span>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section" id="problem" style="position:relative;overflow:hidden">
+
+  <!-- Dot grid background -->
+  <div class="dot-grid" style="top:0;left:0;right:0;bottom:0;">
+    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots" x="0" y="0" width="32" height="32" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="1" fill="#FF5C00"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#dots)"/>
+    </svg>
+  </div>
+
+  <!-- Abstract truck silhouette bottom-right -->
+  <div class="truck-mark" style="right:-60px;bottom:-40px;width:520px;height:260px;">
+    <svg viewBox="0 0 520 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Cab -->
+      <rect x="340" y="80" width="140" height="120" rx="8" fill="#FF5C00"/>
+      <rect x="380" y="90" width="90" height="60" rx="4" fill="#FF5C00"/>
+      <!-- Windshield cutout -->
+      <rect x="390" y="95" width="75" height="50" rx="3" fill="transparent" stroke="#FF5C00" stroke-width="2"/>
+      <!-- Trailer -->
+      <rect x="20" y="70" width="310" height="130" rx="6" fill="#FF5C00"/>
+      <!-- Wheels -->
+      <circle cx="80" cy="220" r="30" fill="#FF5C00"/>
+      <circle cx="80" cy="220" r="16" fill="transparent" stroke="#FF5C00" stroke-width="3"/>
+      <circle cx="200" cy="220" r="30" fill="#FF5C00"/>
+      <circle cx="200" cy="220" r="16" fill="transparent" stroke="#FF5C00" stroke-width="3"/>
+      <circle cx="400" cy="220" r="30" fill="#FF5C00"/>
+      <circle cx="400" cy="220" r="16" fill="transparent" stroke="#FF5C00" stroke-width="3"/>
+      <circle cx="460" cy="220" r="30" fill="#FF5C00"/>
+      <circle cx="460" cy="220" r="16" fill="transparent" stroke="#FF5C00" stroke-width="3"/>
+      <!-- Undercarriage -->
+      <line x1="20" y1="200" x2="480" y2="200" stroke="#FF5C00" stroke-width="6"/>
+    </svg>
+  </div>
+
+  <div class="container">
+    <div class="problem-header reveal">
+      <div>
+        <p class="t-label" style="margin-bottom:24px">The Problem</p>
+        <h2 class="problem-statement">Most trucking businesses are <em>invisible online.</em></h2>
+      </div>
+      <p class="t-body" style="max-width:380px">They have great services but no system to show it — no content, no ads, no follow-up. Competitors with inferior services win simply because they market better.</p>
+    </div>
+
+    <div class="problem-items reveal reveal-d1">
+      <div class="problem-item">
+        <p class="problem-item-num">01</p>
+        <h3>No online presence</h3>
+        <p>No website, no social media, no Google presence. If clients can't find you, they hire someone else.</p>
+      </div>
+      <div class="problem-item">
+        <p class="problem-item-num">02</p>
+        <h3>Wasted ad spend</h3>
+        <p>Running generic campaigns with no strategy. Every dollar burned is revenue that should have been yours.</p>
+      </div>
+      <div class="problem-item">
+        <p class="problem-item-num">03</p>
+        <h3>Leads that go cold</h3>
+        <p>Inquiries come in but no system follows up. No automation, no nurture — prospects choose a competitor who responds faster.</p>
+      </div>
+      <div class="problem-item">
+        <p class="problem-item-num">04</p>
+        <h3>No time to market</h3>
+        <p>You're running operations, not campaigns. Trucking is a full-time job — marketing shouldn't be another one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- SERVICES -->
+<section class="section" id="services" style="position:relative;overflow:hidden">
+  <!-- orbit watermark top-right -->
+  <div class="orbit-watermark" style="top:-80px;right:-120px;width:420px;height:420px;">
+    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <circle cx="100" cy="100" r="90" stroke="#FF5C00" stroke-width="1"/>
+      <circle cx="100" cy="100" r="60" stroke="#FF5C00" stroke-width="0.6"/>
+      <circle cx="100" cy="100" r="30" stroke="#FF5C00" stroke-width="0.4"/>
+      <ellipse cx="100" cy="100" rx="90" ry="30" stroke="#FF5C00" stroke-width="0.8"/>
+      <ellipse cx="100" cy="100" rx="60" ry="20" stroke="#FF5C00" stroke-width="0.5"/>
+      <circle cx="100" cy="10" r="5" fill="#FF5C00"/>
+      <circle cx="100" cy="190" r="3.5" fill="#FF5C00" opacity="0.6"/>
+      <circle cx="10" cy="100" r="3" fill="#FF5C00" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="services-intro reveal">
+      <div>
+        <p class="t-label" style="margin-bottom:24px">Our Services</p>
+        <h2 class="t-h1">Everything your<br />business needs.</h2>
+      </div>
+      <p class="t-body" style="align-self:end">Six services. One agency. All built specifically for trucking companies. You focus on closing deals — we handle everything else.</p>
+    </div>
+
+    <div class="services-list reveal reveal-d1">
+      <div class="service">
+        <span class="service-index">01</span>
+        <div class="service-body">
+          <h3>Full-service marketing</h3>
+          <p>Strategy, branding, ads, CRM, and analytics — all under one roof. We build your entire marketing system from scratch and run it for you.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">Strategy</span>
+          <span class="pill">CRM</span>
+          <span class="pill">Analytics</span>
+        </div>
+      </div>
+      <div class="service">
+        <span class="service-index">02</span>
+        <div class="service-body">
+          <h3>Lead generation (paid ads)</h3>
+          <p>Meta, Google Ads, and beyond — leads that actually convert. We run the campaigns, optimize weekly, and make sure every dollar works harder.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">Targeting</span>
+          <span class="pill">Search Ads</span>
+          <span class="pill">Quizzes</span>
+          <span class="pill">A/B Testing</span>
+        </div>
+      </div>
+      <div class="service">
+        <span class="service-index">03</span>
+        <div class="service-body">
+          <h3>SMM (Instagram & Facebook)</h3>
+          <p>Social media managed with one goal: inbound leads. Content, Reels, Stories, and funnels — your account becomes a sales channel, not a dead page.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">Reels</span>
+          <span class="pill">Stories</span>
+          <span class="pill">Content</span>
+        </div>
+      </div>
+      <div class="service">
+        <span class="service-index">04</span>
+        <div class="service-body">
+          <h3>AI + automation</h3>
+          <p>AI assistants, chatbots, auto-funnels, and analytics. We automate your pipeline so no lead falls through the cracks — even at 2am.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">AI</span>
+          <span class="pill">Chatbots</span>
+          <span class="pill">Auto-funnels</span>
+        </div>
+      </div>
+      <div class="service">
+        <span class="service-index">05</span>
+        <div class="service-body">
+          <h3>Video production</h3>
+          <p>Reels, brand videos, drone footage. We show your trucks and operations through visuals that actually move people — and convert viewers into clients.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">Reels</span>
+          <span class="pill">Drone</span>
+          <span class="pill">Brand video</span>
+        </div>
+      </div>
+      <div class="service">
+        <span class="service-index">06</span>
+        <div class="service-body">
+          <h3>Website creation</h3>
+          <p>Sites and landing pages built to sell — not just exist. SEO, structure, and ongoing support included. Your website works while you sleep.</p>
+        </div>
+        <div class="service-tags-wrap">
+          <span class="pill">Landing pages</span>
+          <span class="pill">SEO</span>
+          <span class="pill">Maintenance</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- PROCESS -->
+<section class="section" id="process" style="position:relative;overflow:hidden">
+  <!-- dot grid accent bottom-left -->
+  <div class="dot-grid" style="bottom:-20px;left:-20px;width:320px;height:220px;">
+    <svg width="100%" height="100%">
+      <defs>
+        <pattern id="dotsPr" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1.5" fill="#FF5C00"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#dotsPr)"/>
+    </svg>
+  </div>
+  <!-- signal wave top-right -->
+  <div style="position:absolute;top:40px;right:-30px;opacity:0.07;pointer-events:none;z-index:0;">
+    <svg width="280" height="120" viewBox="0 0 280 120" fill="none">
+      <path d="M0 60 Q35 10 70 60 Q105 110 140 60 Q175 10 210 60 Q245 110 280 60" stroke="#FF5C00" stroke-width="1.5" fill="none"/>
+      <path d="M0 80 Q35 30 70 80 Q105 130 140 80 Q175 30 210 80 Q245 130 280 80" stroke="#FF5C00" stroke-width="1" fill="none" opacity="0.6"/>
+      <path d="M0 40 Q35 -10 70 40 Q105 90 140 40 Q175 -10 210 40 Q245 90 280 40" stroke="#FF5C00" stroke-width="0.8" fill="none" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="container">
+    <div class="reveal">
+      <p class="t-label" style="margin-bottom:24px">How It Works</p>
+      <h2 class="t-h1" style="max-width:600px">From strategy<br />to results in 30 days.</h2>
+    </div>
+
+    <div class="process-grid reveal reveal-d1">
+      <div class="process-step">
+        <p class="process-num">Step 01</p>
+        <h3>Free Strategy Call</h3>
+        <p>We audit your current marketing, identify gaps, and show you exactly what's costing you leads. Zero cost. Zero obligation.</p>
+      </div>
+      <div class="process-step">
+        <p class="process-num">Step 02</p>
+        <h3>Custom Plan</h3>
+        <p>We build a marketing plan specific to your company — the right channels, content, and budget for your goals.</p>
+      </div>
+      <div class="process-step">
+        <p class="process-num">Step 03</p>
+        <h3>Launch</h3>
+        <p>Campaigns live. Content publishing. Automations active. Your business starts showing up where it matters.</p>
+      </div>
+      <div class="process-step">
+        <p class="process-num">Step 04</p>
+        <h3>Optimize & Scale</h3>
+        <p>Weekly reviews. We cut what doesn't work and double down on what does. Compounding results month over month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- WHY + AUDIT -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="why-layout">
+      <div class="reveal">
+        <p class="t-label" style="margin-bottom:24px">Why Nevio Lab</p>
+        <h2 class="t-h1">We only work<br />with trucking.</h2>
+
+        <div class="why-list">
+          <div class="why-item">
+            <svg class="why-icon" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#FF5C00" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>Industry-specific expertise</h4>
+              <p>We know trucking inside out. No onboarding, no guesswork — we speak your language from day one.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <svg class="why-icon" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#FF5C00" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>No long-term contracts</h4>
+              <p>We earn your business every month. Our results speak — no lock-in, no fine print.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <svg class="why-icon" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#FF5C00" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>Full transparency</h4>
+              <p>Weekly reports. Real numbers. You see exactly where every dollar goes and what it produced.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <svg class="why-icon" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#FF5C00" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>Done-for-you</h4>
+              <p>We handle everything — ads, content, automation, websites. You run your business. We grow it.</p>
+            </div>
+          </div>
+          <div class="why-item">
+            <svg class="why-icon" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="8" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <path d="M5.5 9l2.5 2.5 4.5-5" stroke="#FF5C00" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <h4>Results in 30 days</h4>
+              <p>Most clients see measurable results within the first month. Fast execution, real outcomes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-d2" id="contact">
+        <div class="audit-card">
+          <p class="audit-label">Free Strategy Call</p>
+          <h2>Find out exactly where<br />you're losing business.</h2>
+          <p>We audit your marketing, find the gaps, and show you a clear path to more leads — delivered in 48 hours. No cost, no pressure.</p>
+          <div class="audit-items">
+            <div class="audit-item">
+              <span class="audit-item-dot"></span>
+              Full audit of your online presence & ad spend
+            </div>
+            <div class="audit-item">
+              <span class="audit-item-dot"></span>
+              Competitor marketing breakdown
+            </div>
+            <div class="audit-item">
+              <span class="audit-item-dot"></span>
+              Custom growth strategy for your business
+            </div>
+            <div class="audit-item">
+              <span class="audit-item-dot"></span>
+              Delivered in 48 hours. Zero obligation.
+            </div>
+          </div>
+          <button onclick="openModal()" class="btn-audit">
+            Book Free Strategy Call
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <p class="audit-sub">Or DM <strong>@nevio_lab</strong> on Instagram</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- TESTIMONIALS -->
+<section class="section-sm">
+  <div class="container">
+    <p class="t-label reveal" style="margin-bottom:16px">Client Results</p>
+    <h2 class="t-h2 reveal reveal-d1">What our clients say.</h2>
+
+    <div class="t-layout">
+      <div class="t-card reveal reveal-d1">
+        <p class="t-quote">"Within a month of working with Nevio Lab our Instagram went from dead to generating actual inbound inquiries. The Reels they produce are a completely different level."</p>
+        <div class="t-sep"></div>
+        <p class="t-author-name">Mike K.</p>
+        <p class="t-author-co">Owner, Midwest Freight Solutions</p>
+      </div>
+      <div class="t-card reveal reveal-d2">
+        <p class="t-quote">"We were burning $3,000/month on ads with nothing to show for it. They rebuilt our entire funnel and now our cost per lead dropped by more than half."</p>
+        <div class="t-sep"></div>
+        <p class="t-author-name">David R.</p>
+        <p class="t-author-co">Operations Director, SR Transport</p>
+      </div>
+      <div class="t-card reveal reveal-d3">
+        <p class="t-quote">"The chatbot they set up handles initial inquiries 24/7. Leads that used to go cold now get a response instantly. We closed 3 new contracts in the first 6 weeks."</p>
+        <div class="t-sep"></div>
+        <p class="t-author-name">Alex T.</p>
+        <p class="t-author-co">CEO, Cardinal Logistics</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section final-cta" style="position:relative;overflow:hidden">
+  <div class="final-cta-glow"></div>
+  <!-- orbit rings behind content -->
+  <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.06;z-index:0;">
+    <svg viewBox="0 0 500 500" width="700" height="700" fill="none">
+      <circle cx="250" cy="250" r="230" stroke="#FF5C00" stroke-width="0.8"/>
+      <circle cx="250" cy="250" r="170" stroke="#FF5C00" stroke-width="0.6"/>
+      <circle cx="250" cy="250" r="110" stroke="#FF5C00" stroke-width="0.5"/>
+      <ellipse cx="250" cy="250" rx="230" ry="76" stroke="#FF5C00" stroke-width="0.7"/>
+      <ellipse cx="250" cy="250" rx="170" ry="56" stroke="#FF5C00" stroke-width="0.5"/>
+      <circle cx="250" cy="20" r="8" fill="#FF5C00"/>
+      <circle cx="250" cy="480" r="5" fill="#FF5C00" opacity="0.5"/>
+      <circle cx="20" cy="250" r="4" fill="#FF5C00" opacity="0.4"/>
+      <circle cx="480" cy="250" r="4" fill="#FF5C00" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="container final-cta-inner reveal" style="position:relative;z-index:1">
+    <h2>Your competitors are<br /><em>already marketing.</em></h2>
+    <p>Book a free strategy call. We'll show you exactly what's costing you leads and how to fix it — no fluff, no guesswork.</p>
+    <button onclick="openModal()" class="btn-primary" style="margin:0 auto;font-size:16px;padding:16px 36px;border:none;cursor:pointer;font-family:inherit">
+      Book Free Strategy Call
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- INTAKE MODAL -->
+<div class="modal-overlay" id="intake-modal" role="dialog" aria-modal="true" aria-label="Book a free strategy call">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Form body -->
+    <div class="modal-form-body">
+      <p class="modal-eyebrow">Free Strategy Call</p>
+      <h2 class="modal-title">Tell us about<br />your business.</h2>
+      <p class="modal-sub">Takes 30 seconds. We'll send you a link to pick a time that works for you.</p>
+
+      <form id="intake-form" onsubmit="handleIntakeSubmit(event)">
+        <div class="modal-field">
+          <label for="f-name">Your name</label>
+          <input id="f-name" name="name" type="text" placeholder="John Smith" required />
+        </div>
+        <div class="modal-field">
+          <label for="f-company">Company name</label>
+          <input id="f-company" name="company" type="text" placeholder="Smith Trucking LLC" required />
+        </div>
+        <div class="modal-field">
+          <label for="f-phone">Phone number</label>
+          <input id="f-phone" name="phone" type="tel" placeholder="(555) 000-0000" required />
+        </div>
+        <div class="modal-field">
+          <label for="f-trucks">How many trucks does your company operate?</label>
+          <select id="f-trucks" name="trucks" required>
+            <option value="" disabled selected>Select fleet size</option>
+            <option value="1-5">1 – 5 trucks</option>
+            <option value="6-15">6 – 15 trucks</option>
+            <option value="16-50">16 – 50 trucks</option>
+            <option value="50+">50+ trucks</option>
+          </select>
+        </div>
+        <button type="submit" class="modal-submit">
+          Get My Free Strategy Call
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+      <p class="modal-note">No spam. No pressure. Just a straight conversation about your growth.</p>
+    </div>
+
+    <!-- Success state -->
+    <div class="modal-success" id="modal-success">
+      <div class="success-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12l5 5 9-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <h3 style="font-size:20px;font-weight:400;letter-spacing:-0.02em;margin-bottom:8px">You're all set!</h3>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.6">Taking you to our calendar to pick a time…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THEME PILL -->
+<div class="theme-pill" id="theme-pill">
+  <span class="theme-pill-dot"></span>
+  <span class="theme-pill-label"></span>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-copy">© 2025 Nevio Lab. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://instagram.com/nevio_lab" target="_blank">@nevio_lab</a>
+        <a href="mailto:hello@neviolab.com">hello@neviolab.com</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── SUNRISE / SUNSET AUTO THEME ──
+  // Solar calculation (NOAA algorithm) — no API needed
+  function getSunTimes(lat, lng, date) {
+    const rad = Math.PI / 180;
+    const deg = 180 / Math.PI;
+    const d = date.getTime() / 86400000 - date.getTimezoneOffset() / 1440 + 2440587.5;
+    const n = Math.round(d - 2451545);
+    const L = (280.46 + 0.9856474 * n) % 360;
+    const g = (357.528 + 0.9856003 * n) % 360;
+    const lambda = L + 1.915 * Math.sin(g * rad) + 0.02 * Math.sin(2 * g * rad);
+    const epsilon = 23.439 - 0.0000004 * n;
+    const sinDec = Math.sin(epsilon * rad) * Math.sin(lambda * rad);
+    const dec = Math.asin(sinDec) * deg;
+    const cosH = (Math.cos(90.833 * rad) - Math.sin(lat * rad) * Math.sin(dec * rad)) / (Math.cos(lat * rad) * Math.cos(dec * rad));
+    if (cosH > 1) return null; // polar night
+    if (cosH < -1) return null; // midnight sun
+    const H = Math.acos(cosH) * deg;
+    const eot = (L - lambda) * 4;
+    const noon = 720 - 4 * lng - eot;
+    const sunriseMin = noon - H * 4;
+    const sunsetMin  = noon + H * 4;
+    return { sunrise: sunriseMin, sunset: sunsetMin };
+  }
+
+  function applyTheme(isDay, announce) {
+    const html = document.documentElement;
+    const was = html.classList.contains('light');
+    html.classList.toggle('light', isDay);
+    if (announce && was !== isDay) showPill(isDay ? '☀︎ Day mode' : '◑ Night mode');
+  }
+
+  function showPill(text) {
+    let pill = document.getElementById('theme-pill');
+    pill.querySelector('.theme-pill-label').textContent = text;
+    pill.classList.add('visible');
+    clearTimeout(pill._t);
+    pill._t = setTimeout(() => pill.classList.remove('visible'), 3000);
+  }
+
+  function checkTheme(lat, lng, announce) {
+    const now = new Date();
+    const localMins = now.getHours() * 60 + now.getMinutes();
+    const times = getSunTimes(lat, lng, now);
+    if (!times) { applyTheme(true, announce); return; }
+    const isDay = localMins >= times.sunrise && localMins < times.sunset;
+    applyTheme(isDay, announce);
+    // Schedule next check at next threshold
+    const nextThreshold = isDay ? times.sunset : (times.sunrise + 1440);
+    const minsUntil = ((nextThreshold - localMins) % 1440 + 1440) % 1440;
+    setTimeout(() => checkTheme(lat, lng, true), minsUntil * 60 * 1000);
+  }
+
+  // Try geolocation; fall back to timezone-based estimate
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => checkTheme(pos.coords.latitude, pos.coords.longitude, false),
+      () => {
+        // Fallback: estimate lat/lng from UTC offset
+        const offset = -new Date().getTimezoneOffset() / 60;
+        const lat = offset * 4; // rough lat estimate
+        const lng = offset * 15;
+        checkTheme(lat, lng, false);
+      },
+      { timeout: 4000 }
+    );
+  } else {
+    const offset = -new Date().getTimezoneOffset() / 60;
+    checkTheme(offset * 4, offset * 15, false);
+  }
+
+  // ── CALENDLY URL — replace with your actual link once set up ──
+  const CALENDLY_URL = 'https://calendly.com/neviolab-agency/30min';
+
+  // ── INTAKE MODAL ──
+  function openModal() {
+    document.getElementById('intake-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('f-name').focus(), 350);
+  }
+
+  function closeModal() {
+    document.getElementById('intake-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    // Reset form after close animation
+    setTimeout(() => {
+      document.getElementById('intake-form').reset();
+      document.querySelector('.modal-form-body').classList.remove('hide');
+      document.getElementById('modal-success').classList.remove('show');
+    }, 300);
+  }
+
+  function handleIntakeSubmit(e) {
+    e.preventDefault();
+    const data = {
+      name:    document.getElementById('f-name').value,
+      company: document.getElementById('f-company').value,
+      phone:   document.getElementById('f-phone').value,
+      trucks:  document.getElementById('f-trucks').value,
+    };
+
+    // Show success state
+    document.querySelector('.modal-form-body').classList.add('hide');
+    document.getElementById('modal-success').classList.add('show');
+
+    // Redirect to Calendly after brief pause
+    // Name pre-filled via Calendly URL params
+    const params = new URLSearchParams({ name: data.name });
+    setTimeout(() => {
+      window.open(CALENDLY_URL + '?' + params.toString(), '_blank');
+      closeModal();
+    }, 1800);
+  }
+
+  // Close on overlay click
+  document.getElementById('intake-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ── CUSTOM CURSOR ──
+  const cursorDot  = document.getElementById('cursor-dot');
+  const cursorRing = document.getElementById('cursor-ring');
+  if (cursorDot && cursorRing) {
+    let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top  = mouseY + 'px';
+    });
+
+    // Ring follows with smooth lag
+    (function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    })();
+
+    // Expand ring on interactive elements
+    const hoverEls = document.querySelectorAll('a, button, [role="button"], input, select, textarea, .service, .t-card, .process-step');
+    hoverEls.forEach(el => {
+      el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+    });
+
+    // Hide when mouse leaves window
+    document.addEventListener('mouseleave', () => { cursorDot.classList.add('hidden'); cursorRing.classList.add('hidden'); });
+    document.addEventListener('mouseenter', () => { cursorDot.classList.remove('hidden'); cursorRing.classList.remove('hidden'); });
+  }
+
+  // ── SCROLL PROGRESS BAR ──
+  const progressBar = document.getElementById('scroll-progress');
+  function updateProgress() {
+    const scrolled = window.scrollY;
+    const total    = document.body.scrollHeight - window.innerHeight;
+    const pct      = total > 0 ? (scrolled / total) * 100 : 0;
+    if (progressBar) progressBar.style.width = pct + '%';
+  }
+
+  // ── WORD SPLIT TEXT ANIMATION ──
+  function splitIntoWords(el) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) textNodes.push(node);
+
+    textNodes.forEach(textNode => {
+      const words = textNode.textContent.split(/(\s+)/);
+      const frag  = document.createDocumentFragment();
+      words.forEach(part => {
+        if (/^\s+$/.test(part)) {
+          frag.appendChild(document.createTextNode(part));
+        } else if (part.length) {
+          const wrap  = document.createElement('span');
+          wrap.className = 'split-word';
+          const inner = document.createElement('span');
+          inner.className = 'split-word-inner';
+          inner.textContent = part;
+          wrap.appendChild(inner);
+          frag.appendChild(wrap);
+        }
+      });
+      textNode.parentNode.replaceChild(frag, textNode);
+    });
+  }
+
+  // Apply split to hero title and section headings
+  const splitTargets = document.querySelectorAll('.hero-title, .section .t-h1, .final-cta h2');
+  splitTargets.forEach(el => {
+    el.classList.remove('reveal'); // use split animation instead
+    splitIntoWords(el);
+  });
+
+  // Stagger each word's delay
+  function activateSplit(el) {
+    el.classList.add('split-active');
+    el.querySelectorAll('.split-word-inner').forEach((w, i) => {
+      w.style.transitionDelay = `${i * 0.05}s`;
+    });
+  }
+
+  const splitObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { activateSplit(e.target); splitObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  splitTargets.forEach(el => splitObserver.observe(el));
+
+  // ── PARALLAX ON HERO ELEMENTS ──
+  const sphere1 = document.querySelector('.sphere-1');
+  const sphere2 = document.querySelector('.sphere-2');
+  const sphere3 = document.querySelector('.sphere-3');
+  const heroRoad = document.querySelector('.hero-road');
+  const orbitWm  = document.querySelector('.orbit-watermark');
+
+  function updateParallax() {
+    const y = window.scrollY;
+    if (sphere1) sphere1.style.transform = `translateY(${-y * 0.18}px)`;
+    if (sphere2) sphere2.style.transform = `translateY(${-y * 0.10}px)`;
+    if (sphere3) sphere3.style.transform = `translateY(${-y * 0.14}px)`;
+    if (heroRoad) heroRoad.style.transform = `translateX(-50%) translateY(${y * 0.12}px)`;
+    if (orbitWm)  orbitWm.style.transform  = `translateY(${-y * 0.08}px)`;
+  }
+
+  // ── SCROLL HEADER + PROGRESS + PARALLAX ──
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+    updateProgress();
+    updateParallax();
+  }, { passive: true });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => ro.observe(el));
+
+  // Animated stat counters
+  function animateStat(el) {
+    const target = parseFloat(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const dur = 1800;
+    const start = performance.now();
+    const isDecimal = target % 1 !== 0;
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 4);
+      const val = isDecimal ? (e * target).toFixed(1) : Math.round(e * target);
+      el.textContent = val + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const statNums = document.querySelectorAll('.stat-number[data-target]');
+  const so = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { animateStat(e.target); so.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  statNums.forEach(el => so.observe(el));
+</script>
+</body>
+</html>
