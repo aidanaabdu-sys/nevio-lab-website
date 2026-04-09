@@ -1989,9 +1989,15 @@
           <path d="M5 12l5 5 9-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div>
+      <div style="text-align:center">
         <h3 style="font-size:20px;font-weight:400;letter-spacing:-0.02em;margin-bottom:8px">You're all set!</h3>
-        <p style="font-size:14px;color:var(--text-2);line-height:1.6">Taking you to our calendar to pick a time…</p>
+        <p style="font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:24px">Now pick a time that works for you.</p>
+        <a id="calendly-link" href="#" target="_blank" class="modal-submit" style="display:inline-flex;text-decoration:none;width:auto;padding:14px 28px">
+          Pick Your Time
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
   </div>
@@ -2125,17 +2131,15 @@
       trucks:  document.getElementById('f-trucks').value,
     };
 
-    // Show success state
+    // Build Calendly URL with name pre-filled
+    const params = new URLSearchParams({ name: data.name });
+    const calendlyHref = CALENDLY_URL + '?' + params.toString();
+    document.getElementById('calendly-link').href = calendlyHref;
+
+    // Show success state (user clicks the button themselves — no popup blocking)
     document.querySelector('.modal-form-body').classList.add('hide');
     document.getElementById('modal-success').classList.add('show');
 
-    // Redirect to Calendly after brief pause
-    // Name pre-filled via Calendly URL params
-    const params = new URLSearchParams({ name: data.name });
-    setTimeout(() => {
-      window.open(CALENDLY_URL + '?' + params.toString(), '_blank');
-      closeModal();
-    }, 1800);
   }
 
   // Close on overlay click
