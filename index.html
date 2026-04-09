@@ -2058,14 +2058,14 @@
 
   function checkTheme(lat, lng, announce) {
     const now = new Date();
-    const localMins = now.getHours() * 60 + now.getMinutes();
+    const utcMins = now.getUTCHours() * 60 + now.getUTCMinutes(); // must match UTC output of getSunTimes
     const times = getSunTimes(lat, lng, now);
     if (!times) { applyTheme(true, announce); return; }
-    const isDay = localMins >= times.sunrise && localMins < times.sunset;
+    const isDay = utcMins >= times.sunrise && utcMins < times.sunset;
     applyTheme(isDay, announce);
     // Schedule next check at next threshold
     const nextThreshold = isDay ? times.sunset : (times.sunrise + 1440);
-    const minsUntil = ((nextThreshold - localMins) % 1440 + 1440) % 1440;
+    const minsUntil = ((nextThreshold - utcMins) % 1440 + 1440) % 1440;
     setTimeout(() => checkTheme(lat, lng, true), minsUntil * 60 * 1000);
   }
 
