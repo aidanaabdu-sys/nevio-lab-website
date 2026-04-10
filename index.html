@@ -11,6 +11,9 @@
   <!-- Instant theme: runs before paint to prevent dark→light flash -->
   <script>
     (function() {
+      var lock = localStorage.getItem('nevio-theme-lock');
+      if (lock === 'light') { document.documentElement.classList.add('light'); return; }
+      if (lock === 'dark') { return; }
       var h = new Date().getHours();
       if (h >= 6 && h < 20) document.documentElement.classList.add('light');
     })();
@@ -367,6 +370,28 @@
       background: var(--orange);
       flex-shrink: 0;
     }
+
+    /* ── THEME TOGGLE BUTTON ── */
+    .theme-toggle {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.45;
+      padding: 0;
+      color: var(--text-2);
+      flex-shrink: 0;
+      transition: opacity 0.2s, border-color 0.2s, color 1.2s, border-color 1.2s;
+    }
+    .theme-toggle:hover { opacity: 0.9; }
+    .theme-toggle svg { display: block; }
+    /* stays white over dark hero in light mode */
+    html.light header:not(.scrolled) .theme-toggle { color: rgba(255,255,255,0.6); border-color: rgba(255,255,255,0.15); }
+    /* slightly more visible when locked to a specific mode */
+    .theme-toggle[data-lock="light"],
+    .theme-toggle[data-lock="dark"] { opacity: 0.65; border-color: rgba(240,134,27,0.35); color: var(--orange); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1460,6 +1485,7 @@
       <a href="#services">Services</a>
       <a href="#process">Process</a>
       <a href="#why">About</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
       <a href="#contact" class="nav-cta">Free Audit</a>
     </nav>
   </div>
@@ -2101,7 +2127,24 @@
     return { sunrise: sunriseMin, sunset: sunsetMin };
   }
 
+  // ── THEME LOCK (localStorage) ──
+  const LOCK_KEY = 'nevio-theme-lock';
+  let themeLock = localStorage.getItem(LOCK_KEY) || 'auto'; // 'auto' | 'light' | 'dark'
+
+  const _iconAuto = `<svg viewBox="0 0 16 16" fill="none" width="12" height="12"><path d="M8 2a6 6 0 0 0 0 12V2z" fill="currentColor"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>`;
+  const _iconSun  = `<svg viewBox="0 0 16 16" fill="none" width="12" height="12"><circle cx="8" cy="8" r="2.5" fill="currentColor"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M11.2 3.4l-1.4 1.4M3.4 11.2l1.4 1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`;
+  const _iconMoon = `<svg viewBox="0 0 16 16" fill="none" width="12" height="12"><path d="M12.5 10.5A6 6 0 0 1 5.5 3.5a5.5 5.5 0 1 0 7 7z" fill="currentColor"/></svg>`;
+
+  function syncToggleBtn() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.innerHTML = themeLock === 'light' ? _iconSun : themeLock === 'dark' ? _iconMoon : _iconAuto;
+    btn.setAttribute('data-lock', themeLock);
+    btn.setAttribute('title', themeLock === 'auto' ? 'Auto (follows sunrise/sunset)' : themeLock === 'light' ? 'Locked: Light — click to cycle' : 'Locked: Dark — click to cycle');
+  }
+
   function applyTheme(isDay, announce) {
+    if (themeLock !== 'auto') return; // locked — skip auto updates
     const html = document.documentElement;
     const was = html.classList.contains('light');
     html.classList.toggle('light', isDay);
@@ -2144,16 +2187,48 @@
     checkTheme(offset * 4, offset * 15, false);
   }
 
-  // Try precise geolocation first; fall back to IP lookup
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      pos => checkTheme(pos.coords.latitude, pos.coords.longitude, false),
-      () => ipFallback(),
-      { timeout: 5000 }
-    );
-  } else {
-    ipFallback();
+  // Apply locked theme immediately (before geo resolves)
+  if (themeLock === 'light') document.documentElement.classList.add('light');
+  if (themeLock === 'dark')  document.documentElement.classList.remove('light');
+
+  // Try precise geolocation first; fall back to IP lookup (only runs if auto)
+  if (themeLock === 'auto') {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => checkTheme(pos.coords.latitude, pos.coords.longitude, false),
+        () => ipFallback(),
+        { timeout: 5000 }
+      );
+    } else {
+      ipFallback();
+    }
   }
+
+  // ── THEME TOGGLE CLICK ──
+  document.addEventListener('DOMContentLoaded', function() {
+    syncToggleBtn();
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      const order = ['auto', 'light', 'dark'];
+      themeLock = order[(order.indexOf(themeLock) + 1) % 3];
+      localStorage.setItem(LOCK_KEY, themeLock);
+      syncToggleBtn();
+      if (themeLock === 'auto') {
+        showPill('◑ Auto mode');
+        // retrigger geo detection
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            pos => checkTheme(pos.coords.latitude, pos.coords.longitude, true),
+            () => ipFallback(),
+            { timeout: 5000 }
+          );
+        } else { ipFallback(); }
+      } else {
+        const isDay = themeLock === 'light';
+        document.documentElement.classList.toggle('light', isDay);
+        showPill(isDay ? '☀︎ Day mode' : '◑ Night mode');
+      }
+    });
+  });
 
   // ── CALENDLY URL — replace with your actual link once set up ──
   const CALENDLY_URL = 'https://calendly.com/neviolab-agency/30min';
