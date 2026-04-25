@@ -42,6 +42,18 @@
   }
   </script>
 
+  <!-- Instant theme: runs before paint -->
+  <script>
+    (function() {
+      var lock = localStorage.getItem('nevio-theme-lock');
+      if (lock === 'light') { document.documentElement.classList.add('light'); return; }
+      if (lock === 'dark') { return; }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.classList.add('light');
+      }
+    })();
+  </script>
+
   <!-- Resource hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -53,25 +65,28 @@
 
     :root {
       --orange: #F0861B;
-      --bg: #0d0d0d;
+      --bg: #0a0a0a;
       --text: #ffffff;
-      --text-2: rgba(255,255,255,0.65);
-      --text-3: rgba(255,255,255,0.35);
+      --text-2: rgba(255,255,255,0.62);
+      --text-3: rgba(255,255,255,0.42);
       --border: rgba(255,255,255,0.08);
       --surface: rgba(255,255,255,0.04);
     }
 
     html.light {
-      --bg: #f5f3ef;
-      --text: #0d0d0d;
-      --text-2: rgba(0,0,0,0.6);
-      --text-3: rgba(0,0,0,0.35);
-      --border: rgba(0,0,0,0.08);
+      --bg: #F2EFEB;
+      --text: #0a0a0a;
+      --text-2: rgba(0,0,0,0.62);
+      --text-3: rgba(0,0,0,0.40);
+      --border: rgba(0,0,0,0.09);
       --surface: rgba(0,0,0,0.04);
+      --orange: #D4740F;
     }
 
+    html { transition: background-color 1.2s ease; }
+
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
@@ -81,21 +96,26 @@
     /* ── NAV ── */
     header {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 0 40px; height: 64px;
-      display: flex; align-items: center;
-      border-bottom: 1px solid var(--border);
-      background: var(--bg);
-      backdrop-filter: blur(12px);
+      height: 64px; display: flex; align-items: center;
+      transition: background 0.5s, border-color 0.5s;
     }
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; margin: 0 auto; }
+    header.scrolled {
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    html.light header.scrolled { background: rgba(242,239,235,0.82); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 48px; }
     .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
     .logo-mark { width: 28px; height: 28px; }
-    .logo-name { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
+    .logo-name { font-size: 16px; font-weight: 500; letter-spacing: -0.02em; }
     .logo-name span { color: var(--orange); }
-    nav { display: flex; align-items: center; gap: 28px; }
-    nav a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 400; transition: color 0.2s; }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 400; padding: 8px 14px; border-radius: 8px; transition: color 0.2s; }
     nav a:hover { color: var(--text); }
-    .nav-cta { background: var(--orange); color: #fff !important; padding: 8px 18px; border-radius: 100px; font-weight: 500 !important; }
+    .nav-cta { background: var(--orange); color: #fff !important; padding: 8px 18px !important; border-radius: 8px; font-weight: 500 !important; transition: opacity 0.2s !important; }
+    .nav-cta:hover { opacity: 0.88 !important; }
 
     /* ── LAYOUT ── */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
@@ -483,5 +503,21 @@
   <p>© 2026 Nevio Lab. All rights reserved.</p>
 </footer>
 
+<script>
+  // Nav scroll behaviour
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  // Theme toggle
+  const toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isLight = document.documentElement.classList.toggle('light');
+      localStorage.setItem('nevio-theme-lock', isLight ? 'light' : 'dark');
+    });
+  }
+</script>
 </body>
 </html>
