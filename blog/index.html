@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Trucking Marketing Insights by Nevio Lab</title>
+  <meta name="description" content="Data-backed insights on driver recruitment, fleet marketing, and growing a trucking company. Written by people who've worked inside the industry." />
+
+  <link rel="canonical" href="https://neviolab.com/blog" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://neviolab.com/blog" />
+  <meta property="og:title" content="Blog — Trucking Marketing Insights by Nevio Lab" />
+  <meta property="og:description" content="Data-backed insights on driver recruitment, fleet marketing, and growing a trucking company." />
+  <meta property="og:image" content="https://neviolab.com/og-image.png" />
+
+  <!-- Resource hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" /></noscript>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F0861B;
+      --bg: #0d0d0d;
+      --text: #ffffff;
+      --text-2: rgba(255,255,255,0.65);
+      --text-3: rgba(255,255,255,0.35);
+      --border: rgba(255,255,255,0.08);
+      --surface: rgba(255,255,255,0.04);
+    }
+
+    html.light {
+      --bg: #f5f3ef;
+      --text: #0d0d0d;
+      --text-2: rgba(0,0,0,0.6);
+      --text-3: rgba(0,0,0,0.35);
+      --border: rgba(0,0,0,0.08);
+      --surface: rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px; height: 64px;
+      display: flex; align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .logo-mark { width: 28px; height: 28px; }
+    .logo-name { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
+    .logo-name span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 400; transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+    .nav-cta { background: var(--orange); color: #fff !important; padding: 8px 18px; border-radius: 100px; font-weight: 500 !important; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 140px 0 80px;
+      border-bottom: 1px solid var(--border);
+    }
+    .t-label { font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; }
+    .page-header h1 {
+      font-size: clamp(40px, 6vw, 72px);
+      font-weight: 600; line-height: 1.05; letter-spacing: -3px;
+      margin-bottom: 20px;
+    }
+    .page-header h1 em { font-style: normal; color: var(--orange); }
+    .page-header p { font-size: 18px; color: var(--text-2); max-width: 480px; line-height: 1.6; }
+
+    /* ── POSTS GRID ── */
+    .posts-section { padding: 80px 0; }
+    .posts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+    .post-card {
+      background: var(--bg); padding: 40px 36px;
+      text-decoration: none; color: var(--text);
+      display: flex; flex-direction: column; gap: 16px;
+      transition: background 0.2s;
+    }
+    .post-card:hover { background: var(--surface); }
+    .post-card-meta { display: flex; align-items: center; gap: 12px; }
+    .post-tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--orange); background: rgba(240,134,27,0.1);
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .post-date { font-size: 12px; color: var(--text-3); }
+    .post-card h2 { font-size: 22px; font-weight: 500; letter-spacing: -0.5px; line-height: 1.3; color: var(--text); }
+    .post-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; flex: 1; }
+    .post-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--orange); font-weight: 500;
+      margin-top: 8px;
+    }
+
+    /* ── COMING SOON CARD ── */
+    .post-card.coming-soon { opacity: 0.4; cursor: default; pointer-events: none; }
+    .post-card.coming-soon:hover { background: var(--bg); }
+    .coming-badge {
+      font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-3); background: var(--surface);
+      padding: 3px 10px; border-radius: 100px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px; margin-top: 80px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    footer p { font-size: 13px; color: var(--text-3); }
+
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      nav a:not(.nav-cta) { display: none; }
+      .container { padding: 0 20px; }
+      .posts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <ellipse cx="16" cy="16" rx="13" ry="7" stroke="currentColor" stroke-width="2" transform="rotate(-20 16 16)"/>
+        <path d="M16 5 Q16 16 25 16 Q16 16 16 27 Q16 16 7 16 Q16 16 16 5 Z" fill="#F0861B"/>
+      </svg>
+      <span class="logo-name">nevio<span>lab</span></span>
+    </a>
+    <nav>
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/#why">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/#contact" class="nav-cta">Free Audit</a>
+    </nav>
+  </div>
+</header>
+
+<div class="page-header">
+  <div class="container">
+    <p class="t-label">Nevio Lab Blog</p>
+    <h1>Insights for<br /><em>trucking companies.</em></h1>
+    <p>Data-backed articles on driver recruitment, fleet marketing, and building a trucking business that grows. Written by people who've worked inside the industry.</p>
+  </div>
+</div>
+
+<section class="posts-section">
+  <div class="container">
+    <div class="posts-grid">
+
+      <!-- POST 1 — LIVE -->
+      <a href="/blog/why-trucking-companies-lose-drivers" class="post-card">
+        <div class="post-card-meta">
+          <span class="post-tag">Driver Recruitment</span>
+          <span class="post-date">April 25, 2026</span>
+        </div>
+        <h2>Why Trucking Companies Lose Drivers to Competitors (And the Ads That Stop It)</h2>
+        <p>Driver turnover in trucking isn't just about pay. Research shows visibility, culture signals, and timing play a bigger role than most carriers realize.</p>
+        <span class="post-link">
+          Read article
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+
+      <!-- POST 2 — COMING SOON -->
+      <div class="post-card coming-soon">
+        <div class="post-card-meta">
+          <span class="coming-badge">Coming Soon</span>
+        </div>
+        <h2>The Real Cost of an Empty Truck: What Driver Turnover Is Actually Costing You</h2>
+        <p>Most carriers underestimate how much a single empty seat costs. The math is more damaging than most owners realize.</p>
+      </div>
+
+      <!-- POST 3 — COMING SOON -->
+      <div class="post-card coming-soon">
+        <div class="post-card-meta">
+          <span class="coming-badge">Coming Soon</span>
+        </div>
+        <h2>How to Lower Your Cost-Per-Hire as a Trucking Company</h2>
+        <p>Practical steps small and mid-size carriers can take to reduce what they spend to bring in each qualified driver applicant.</p>
+      </div>
+
+      <!-- POST 4 — COMING SOON -->
+      <div class="post-card coming-soon">
+        <div class="post-card-meta">
+          <span class="coming-badge">Coming Soon</span>
+        </div>
+        <h2>Facebook Ads for Trucking Companies: A Step-by-Step Guide to Getting Driver Applicants</h2>
+        <p>A practical breakdown of how to run driver recruiting ads on Facebook and Instagram without wasting your budget.</p>
+      </div>
+
+      <!-- POST 5 — COMING SOON -->
+      <div class="post-card coming-soon">
+        <div class="post-card-meta">
+          <span class="coming-badge">Coming Soon</span>
+        </div>
+        <h2>Driver Retention Starts Before They're Hired: A Trucking Recruiter's Guide</h2>
+        <p>The decisions you make during recruiting directly shape how long a driver stays. Here's what the research says about building retention in from day one.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Nevio Lab. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
