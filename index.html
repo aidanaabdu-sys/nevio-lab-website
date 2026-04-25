@@ -6,6 +6,7 @@
   <title>Nevio Lab — Driver Acquisition for Trucking Companies</title>
   <meta name="description" content="We build predictable CDL driver acquisition systems for trucking companies. Less wasted spend. More drivers who actually respond." />
 
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="canonical" href="https://neviolab.com/" />
   <meta name="msvalidate.01" content="2E240760D5ADD4DF6BD5B83C2DEE8F71" />
 
@@ -58,8 +59,10 @@
       var lock = localStorage.getItem('nevio-theme-lock');
       if (lock === 'light') { document.documentElement.classList.add('light'); return; }
       if (lock === 'dark') { return; }
-      var h = new Date().getHours();
-      if (h >= 6 && h < 20) document.documentElement.classList.add('light');
+      // Respect OS preference instead of time-based switching
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.classList.add('light');
+      }
     })();
   </script>
   <style>
@@ -289,8 +292,13 @@
     }
 
     /* ── THEME TRANSITION ── */
-    html { transition: background 1.2s ease, color 1.2s ease; }
-    *, *::before, *::after { transition: background-color 1.2s ease, border-color 1.2s ease, color 1.2s ease; }
+    /* Slow transition only on html root for theme switching; interactive elements use fast transitions */
+    html { transition: background-color 1.2s ease; }
+    a, button, .pill, .service, .t-card, .problem-item, .process-step,
+    .nav-cta, .btn-primary, .btn-audit, .footer-links a, nav a {
+      transition: color 0.2s ease, background-color 0.2s ease,
+                  border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease !important;
+    }
 
     /* ── DARK MODE (default) ── */
     :root {
@@ -304,8 +312,8 @@
       --mid: #1a1a1a;
       --line: rgba(255,255,255,0.08);
       --text: #ffffff;
-      --text-2: rgba(255,255,255,0.5);
-      --text-3: rgba(255,255,255,0.25);
+      --text-2: rgba(255,255,255,0.62);
+      --text-3: rgba(255,255,255,0.42);
       --r: 16px;
     }
 
@@ -319,8 +327,8 @@
       --mid: #D4D1CD;
       --line: rgba(0,0,0,0.09);
       --text: #0A0A0A;
-      --text-2: rgba(0,0,0,0.45);
-      --text-3: rgba(0,0,0,0.22);
+      --text-2: rgba(0,0,0,0.62);
+      --text-3: rgba(0,0,0,0.40);
     }
 
     /* Elements that must stay white regardless of theme */
@@ -372,9 +380,9 @@
     html.light .problem-statement em { color: rgba(0,0,0,0.4); }
     /* sphere stays visible on dark hero in both modes */
     html.light .nav-cta {
-      background: rgba(0,0,0,0.07) !important;
-      border-color: rgba(0,0,0,0.12) !important;
-      color: #0A0A0A !important;
+      background: var(--orange) !important;
+      border-color: transparent !important;
+      color: #fff !important;
     }
     html.light .btn-audit {
       background: #0A0A0A !important;
@@ -450,7 +458,7 @@
       background: var(--black);
       color: var(--text);
       overflow-x: hidden;
-      line-height: 1;
+      line-height: 1.5;
     }
 
     img, svg { display: block; }
@@ -601,18 +609,17 @@
     .nav-cta {
       font-size: 14px;
       font-weight: 500;
-      color: var(--white) !important;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff !important;
+      background: var(--orange);
+      border: 1px solid transparent;
       padding: 8px 18px !important;
       border-radius: 8px;
-      transition: background 0.2s, border-color 0.2s !important;
+      transition: opacity 0.2s !important;
     }
 
     .nav-cta:hover {
-      background: rgba(255,255,255,0.12) !important;
-      border-color: rgba(255,255,255,0.2) !important;
-      color: var(--white) !important;
+      opacity: 0.88 !important;
+      color: #fff !important;
     }
 
     /* ── HERO ── */
@@ -1363,7 +1370,7 @@
     .reveal {
       opacity: 0;
       transform: translateY(40px);
-      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .reveal.in { opacity: 1; transform: translateY(0); }
@@ -1487,8 +1494,13 @@
       .problem-header { grid-template-columns: 1fr; gap: 48px; }
       .problem-items { grid-template-columns: 1fr; }
       .services-intro { grid-template-columns: 1fr; gap: 32px; }
-      .service { grid-template-columns: 32px 1fr; }
-      .service-tags-wrap { display: none; }
+      .service { grid-template-columns: 32px 1fr; flex-wrap: wrap; }
+      .service-tags-wrap {
+        grid-column: 2;
+        justify-content: flex-start;
+        max-width: 100%;
+        margin-top: 12px;
+      }
       .process-grid { grid-template-columns: 1fr 1fr; }
       .why-layout { grid-template-columns: 1fr; gap: 64px; }
       .audit-card { position: static; padding: 40px 32px; }
@@ -1497,9 +1509,105 @@
       .footer-inner { flex-direction: column; gap: 16px; text-align: center; }
       .section { padding: 100px 0; }
     }
+
+    /* ── MOBILE NAV ── */
+    .mobile-nav-controls {
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hamburger {
+      width: 36px; height: 36px;
+      background: none; border: 1px solid var(--line);
+      border-radius: 8px; cursor: pointer;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 5px;
+      padding: 0; color: var(--text);
+    }
+
+    .hamburger span {
+      display: block; width: 16px; height: 1.5px;
+      background: currentColor; border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--near-black);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1; pointer-events: all;
+    }
+
+    .mobile-menu-nav {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      width: 100%; padding: 0 40px;
+    }
+
+    .mobile-menu-link {
+      font-size: clamp(28px, 8vw, 48px);
+      font-weight: 300; letter-spacing: -0.03em;
+      color: var(--text-2); text-align: center;
+      padding: 12px 0; width: 100%;
+      transition: color 0.2s ease;
+    }
+
+    .mobile-menu-link:hover { color: var(--text); }
+
+    .mobile-menu-cta {
+      margin-top: 24px;
+      font-size: 16px; font-weight: 500; letter-spacing: 0;
+      background: var(--orange); color: #fff !important;
+      padding: 14px 36px; border-radius: 100px;
+      width: auto;
+    }
+
+    @media (max-width: 900px) {
+      #desktop-nav { display: none; }
+      .mobile-nav-controls { display: flex; }
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      .split-word-inner {
+        transform: none;
+      }
+    }
   </style>
 </head>
 <body>
+
+<!-- SKIP LINK -->
+<a href="#main" class="skip-link">Skip to main content</a>
+<style>
+  .skip-link {
+    position: absolute; top: -100%; left: 16px;
+    background: var(--orange); color: #fff;
+    padding: 8px 16px; border-radius: 4px;
+    font-size: 14px; font-weight: 500;
+    z-index: 99999; text-decoration: none;
+  }
+  .skip-link:focus { top: 8px; }
+</style>
 
 <!-- SCROLL PROGRESS -->
 <div class="scroll-progress" id="scroll-progress"></div>
@@ -1525,18 +1633,37 @@
       </svg>
       <span class="logo-name">nevio<span>lab</span></span>
     </a>
-    <nav>
+    <nav id="desktop-nav">
       <a href="#services">Services</a>
       <a href="#process">Process</a>
       <a href="#why">About</a>
       <a href="/blog">Blog</a>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
-      <a href="#contact" class="nav-cta">Free Audit</a>
+      <a href="#contact" class="nav-cta">Free Strategy Call</a>
     </nav>
+    <!-- Mobile controls -->
+    <div class="mobile-nav-controls">
+      <button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle theme"></button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
 
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <nav class="mobile-menu-nav">
+    <a href="#services" class="mobile-menu-link">Services</a>
+    <a href="#process" class="mobile-menu-link">Process</a>
+    <a href="#why" class="mobile-menu-link">About</a>
+    <a href="/blog" class="mobile-menu-link">Blog</a>
+    <a href="#contact" class="mobile-menu-link mobile-menu-cta">Free Strategy Call</a>
+  </nav>
+</div>
+
 <!-- HERO -->
+<main id="main">
 <section class="hero">
   <div class="hero-canvas">
     <div class="sphere sphere-1"></div>
@@ -1851,23 +1978,48 @@
     <h2 class="t-h2 reveal reveal-d1">What our clients say.</h2>
 
     <div class="t-layout">
-      <div class="t-card reveal reveal-d1">
+      <div class="t-card reveal reveal-d1" style="border-color: rgba(240,134,27,0.2);">
+        <div style="display:flex; gap:3px; margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+        </div>
+        <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(240,134,27,0.08);border:1px solid rgba(240,134,27,0.2);border-radius:100px;padding:4px 12px;margin-bottom:20px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--orange);display:inline-block;flex-shrink:0;"></span>
+          <span style="font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange);">38 drivers · 40 days</span>
+        </div>
         <p class="t-quote">"We were burning $4,000 every month on ads with nothing to show for it. Nevio rebuilt our entire funnel — cost per lead dropped by more than half, and in 40 days we hired 38 drivers."</p>
         <div class="t-sep"></div>
         <p class="t-author-name">Renat Samutdinov</p>
-        <p class="t-author-co">Owner, Modern Nomad</p>
+        <p class="t-author-co">Owner · Modern Nomad</p>
       </div>
       <div class="t-card reveal reveal-d2">
+        <div style="display:flex; gap:3px; margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+        </div>
         <p class="t-quote">"We were burning $3,000/month on ads with nothing to show for it. They rebuilt our entire funnel and now our cost per lead dropped by more than half."</p>
         <div class="t-sep"></div>
         <p class="t-author-name">David R.</p>
-        <p class="t-author-co">Operations Director, SR Transport</p>
+        <p class="t-author-co">Operations Director · SR Transport</p>
       </div>
       <div class="t-card reveal reveal-d3">
+        <div style="display:flex; gap:3px; margin-bottom:20px;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="#F0861B" aria-hidden="true"><path d="M7 1l1.5 4H13l-3.6 2.6L10.8 12 7 9.4 3.2 12l1.4-4.4L1 5h4.5z"/></svg>
+        </div>
         <p class="t-quote">"The chatbot they set up handles initial inquiries 24/7. Leads that used to go cold now get a response instantly. We closed 3 new contracts in the first 6 weeks."</p>
         <div class="t-sep"></div>
         <p class="t-author-name">Alex T.</p>
-        <p class="t-author-co">CEO, Cardinal Logistics</p>
+        <p class="t-author-co">CEO · Cardinal Logistics</p>
       </div>
     </div>
   </div>
@@ -2049,13 +2201,19 @@
   <span class="theme-pill-label"></span>
 </div>
 
+</main>
+
 <!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="footer-inner">
       <p class="footer-copy">© 2026 Nevio Lab. All rights reserved.</p>
       <div class="footer-links">
-        <a href="https://instagram.com/nevio_lab" target="_blank">@nevio_lab</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#why">About</a>
+        <a href="/blog">Blog</a>
+        <a href="https://instagram.com/nevio_lab" target="_blank" rel="noopener">Instagram</a>
         <a href="mailto:hello@neviolab.com">hello@neviolab.com</a>
       </div>
     </div>
@@ -2194,15 +2352,33 @@
   const CALENDLY_URL = 'https://calendly.com/neviolab-agency/30min';
 
   // ── INTAKE MODAL ──
+  // Focus trap helpers
+  const FOCUSABLE = 'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  let lastFocusedEl = null;
+
+  function trapFocus(e) {
+    const modal = document.getElementById('intake-modal');
+    const focusable = Array.from(modal.querySelectorAll(FOCUSABLE));
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (e.key === 'Tab') {
+      if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+      else { if (document.activeElement === last) { e.preventDefault(); first.focus(); } }
+    }
+  }
+
   function openModal() {
+    lastFocusedEl = document.activeElement;
     document.getElementById('intake-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
     setTimeout(() => document.getElementById('f-name').focus(), 350);
+    document.addEventListener('keydown', trapFocus);
   }
 
   function closeModal() {
     document.getElementById('intake-modal').classList.remove('open');
     document.body.style.overflow = '';
+    document.removeEventListener('keydown', trapFocus);
+    if (lastFocusedEl) lastFocusedEl.focus();
     // Reset form after close animation
     setTimeout(() => {
       document.getElementById('intake-form').reset();
@@ -2407,6 +2583,41 @@
     entries.forEach(e => { if (e.isIntersecting) { animateStat(e.target); so.unobserve(e.target); } });
   }, { threshold: 0.5 });
   statNums.forEach(el => so.observe(el));
+
+  // ── MOBILE MENU ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = mobileMenu.querySelectorAll('.mobile-menu-link');
+
+  function openMenu() {
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    mobileMenu.classList.add('open');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    mobileMenu.classList.remove('open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+
+  // Close on link click
+  mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+  // Mirror theme toggle for mobile
+  const themeMobile = document.getElementById('theme-toggle-mobile');
+  if (themeMobile) {
+    themeMobile.innerHTML = document.getElementById('theme-toggle').innerHTML;
+    themeMobile.addEventListener('click', () => document.getElementById('theme-toggle').click());
+  }
 </script>
 </body>
 </html>

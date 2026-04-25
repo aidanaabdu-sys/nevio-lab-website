@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDL Driver Acquisition for Trucking Companies — Nevio Lab</title>
+  <meta name="description" content="Nevio Lab builds predictable CDL driver acquisition systems for trucking companies. More qualified applicants. Lower cost-per-hire. Faster fills." />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="canonical" href="https://neviolab.com/services/driver-acquisition" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://neviolab.com/services/driver-acquisition" />
+  <meta property="og:title" content="CDL Driver Acquisition for Trucking Companies — Nevio Lab" />
+  <meta property="og:description" content="We build predictable CDL driver acquisition systems for trucking companies. More qualified applicants. Lower cost-per-hire. Faster fills." />
+  <meta property="og:image" content="https://neviolab.com/og-image.png" />
+
+  <!-- Resource hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" /></noscript>
+
+  <!-- Service Page Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "CDL Driver Acquisition",
+    "provider": {
+      "@type": "Organization",
+      "name": "Nevio Lab",
+      "url": "https://neviolab.com"
+    },
+    "description": "Predictable CDL driver acquisition systems for trucking companies — paid ads, landing pages, and CRM follow-up built to reduce cost-per-hire.",
+    "areaServed": "US",
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Trucking companies"
+    }
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F0861B;
+      --bg: #0d0d0d;
+      --text: #ffffff;
+      --text-2: rgba(255,255,255,0.65);
+      --text-3: rgba(255,255,255,0.35);
+      --border: rgba(255,255,255,0.08);
+      --surface: rgba(255,255,255,0.04);
+    }
+
+    html.light {
+      --bg: #f5f3ef;
+      --text: #0d0d0d;
+      --text-2: rgba(0,0,0,0.6);
+      --text-3: rgba(0,0,0,0.35);
+      --border: rgba(0,0,0,0.08);
+      --surface: rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 40px;
+      height: 64px;
+      display: flex; align-items: center;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1200px; margin: 0 auto; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .logo-mark { width: 28px; height: 28px; }
+    .logo-name { font-size: 16px; font-weight: 500; letter-spacing: -0.2px; }
+    .logo-name span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 400; transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+    .nav-cta { background: var(--orange); color: #fff !important; padding: 8px 18px; border-radius: 100px; font-weight: 500 !important; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+    .section { padding: 120px 0; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--bg);
+      padding-top: 64px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(240,134,27,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240,134,27,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-glow {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(240,134,27,0.12) 0%, transparent 65%);
+      border-radius: 50%; z-index: 0;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 24px;
+    }
+    .eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--orange); }
+    h1 {
+      font-size: clamp(48px, 7vw, 84px);
+      font-weight: 600; line-height: 1.02; letter-spacing: -3px;
+      margin-bottom: 28px;
+    }
+    h1 em { font-style: normal; color: var(--orange); }
+    .hero-desc {
+      font-size: 20px; font-weight: 300; color: var(--text-2);
+      max-width: 560px; line-height: 1.6; margin-bottom: 48px;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 14px 28px; border-radius: 100px;
+      font-size: 15px; font-weight: 500; text-decoration: none;
+      border: none; cursor: pointer; font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-secondary {
+      font-size: 14px; color: var(--text-2); text-decoration: none;
+      border-bottom: 1px solid var(--text-3); padding-bottom: 2px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; margin-top: 80px;
+    }
+    .stat-box { background: var(--bg); padding: 40px 32px; }
+    .stat-num { font-size: 48px; font-weight: 600; letter-spacing: -2px; color: var(--orange); margin-bottom: 8px; }
+    .stat-label { font-size: 14px; color: var(--text-2); line-height: 1.4; }
+
+    /* ── SECTION HEADINGS ── */
+    .t-label { font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 20px; }
+    h2 { font-size: clamp(36px, 5vw, 58px); font-weight: 600; line-height: 1.05; letter-spacing: -2px; margin-bottom: 20px; }
+    h2 em { font-style: normal; color: var(--orange); }
+    .section-desc { font-size: 18px; color: var(--text-2); max-width: 500px; line-height: 1.6; }
+
+    /* ── WHAT'S INCLUDED ── */
+    .included-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+      background: var(--border); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden; margin-top: 60px;
+    }
+    .included-item {
+      background: var(--bg); padding: 40px 36px;
+    }
+    .included-num { font-size: 11px; font-weight: 500; letter-spacing: 2px; color: var(--text-3); text-transform: uppercase; margin-bottom: 16px; }
+    h3 { font-size: 20px; font-weight: 500; letter-spacing: -0.3px; margin-bottom: 10px; }
+    .included-desc { font-size: 15px; color: var(--text-2); line-height: 1.6; }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: flex; flex-direction: column; gap: 2px; margin-top: 60px; }
+    .step {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 32px; align-items: start;
+      padding: 36px 0; border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num { font-size: 13px; font-weight: 500; color: var(--text-3); padding-top: 4px; }
+    .step-body h3 { font-size: 22px; font-weight: 500; letter-spacing: -0.4px; margin-bottom: 8px; }
+    .step-body p { font-size: 15px; color: var(--text-2); line-height: 1.6; max-width: 580px; }
+
+    /* ── WHO IT'S FOR ── */
+    .for-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 60px; }
+    .for-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px 24px;
+    }
+    .for-card h3 { font-size: 17px; font-weight: 500; margin-bottom: 8px; }
+    .for-card p { font-size: 14px; color: var(--text-2); line-height: 1.5; }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center; padding: 140px 0;
+      border-top: 1px solid var(--border);
+    }
+    .cta-section h2 { font-size: clamp(40px, 6vw, 72px); margin-bottom: 20px; }
+    .cta-section p { font-size: 18px; color: var(--text-2); margin-bottom: 48px; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    footer p { font-size: 13px; color: var(--text-3); }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 13px; color: var(--text-3); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .breadcrumb a { color: var(--text-3); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text-2); }
+
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      nav a:not(.nav-cta) { display: none; }
+      .container { padding: 0 20px; }
+      .section { padding: 80px 0; }
+      h1 { letter-spacing: -1.5px; }
+      .stats-row { grid-template-columns: 1fr; }
+      .included-grid { grid-template-columns: 1fr; }
+      .for-grid { grid-template-columns: 1fr; }
+      .step { grid-template-columns: 48px 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <ellipse cx="16" cy="16" rx="13" ry="7" stroke="currentColor" stroke-width="2" transform="rotate(-20 16 16)"/>
+        <path d="M16 5 Q16 16 25 16 Q16 16 16 27 Q16 16 7 16 Q16 16 16 5 Z" fill="#F0861B"/>
+      </svg>
+      <span class="logo-name">nevio<span>lab</span></span>
+    </a>
+    <nav>
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/#why">About</a>
+      <a href="/#contact" class="nav-cta">Free Strategy Call</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/#services">Services</a>
+        <span>/</span>
+        <span>Driver Acquisition</span>
+      </div>
+      <p class="eyebrow">CDL Driver Acquisition</p>
+      <h1>Stop Losing Drivers<br />to <em>Competitors.</em></h1>
+      <p class="hero-desc">We build done-for-you driver acquisition systems — targeted ads, optimized landing pages, and automated follow-up — that bring qualified CDL applicants to your door consistently.</p>
+      <div class="hero-actions">
+        <a href="/#contact" class="btn-primary">
+          Get Free Strategy Call
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+            <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="/#services" class="btn-secondary">See all services</a>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num">3×</div>
+        <p class="stat-label">More qualified applicants<br />vs. generic job boards</p>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">30</div>
+        <p class="stat-label">Days to first measurable<br />results after launch</p>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">100%</div>
+        <p class="stat-label">Trucking-focused —<br />no generic playbooks</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S INCLUDED -->
+<section class="section">
+  <div class="container">
+    <p class="t-label">What's Included</p>
+    <h2>Everything you need to<br /><em>fill seats faster.</em></h2>
+    <p class="section-desc">A full acquisition system — not just ads. We build and manage every piece so you can focus on running your fleet.</p>
+
+    <div class="included-grid">
+      <div class="included-item">
+        <p class="included-num">01</p>
+        <h3>Targeted Driver Ad Campaigns</h3>
+        <p class="included-desc">Facebook, Instagram, and Google ads built specifically to reach CDL-A/B drivers in your region — not just anyone scrolling their feed.</p>
+      </div>
+      <div class="included-item">
+        <p class="included-num">02</p>
+        <h3>High-Converting Landing Pages</h3>
+        <p class="included-desc">Custom pages designed to turn ad clicks into applicants. Built for mobile, fast-loading, and optimized around what drivers actually care about.</p>
+      </div>
+      <div class="included-item">
+        <p class="included-num">03</p>
+        <h3>Automated Follow-Up Sequences</h3>
+        <p class="included-desc">Most applicants don't respond to the first message. We set up automated SMS and email follow-up so no lead goes cold.</p>
+      </div>
+      <div class="included-item">
+        <p class="included-num">04</p>
+        <h3>Applicant Tracking & Reporting</h3>
+        <p class="included-desc">Weekly reports showing exactly how many applicants came in, what they cost, and where they came from. No guesswork.</p>
+      </div>
+      <div class="included-item">
+        <p class="included-num">05</p>
+        <h3>Audience Targeting & Retargeting</h3>
+        <p class="included-desc">We build lookalike audiences from your best hires and retarget drivers who visited but didn't apply — lowering your cost-per-hire over time.</p>
+      </div>
+      <div class="included-item">
+        <p class="included-num">06</p>
+        <h3>Ongoing Optimization</h3>
+        <p class="included-desc">We test ads, audiences, and landing page copy every month. What works gets scaled. What doesn't gets cut. Continuously improving.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" style="border-top: 1px solid var(--border)">
+  <div class="container">
+    <p class="t-label">How It Works</p>
+    <h2>From kickoff to<br /><em>applicants in 30 days.</em></h2>
+
+    <div class="steps">
+      <div class="step">
+        <p class="step-num">Step 01</p>
+        <div class="step-body">
+          <h3>Free Strategy Call</h3>
+          <p>We learn about your routes, pay, home time, and what makes your company a great place to drive. This becomes the foundation of your messaging.</p>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-num">Step 02</p>
+        <div class="step-body">
+          <h3>We Build Your System</h3>
+          <p>Ads, landing page, follow-up sequences, and tracking — all built in the first two weeks. You review and approve before anything goes live.</p>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-num">Step 03</p>
+        <div class="step-body">
+          <h3>Launch & First Applicants</h3>
+          <p>We launch your campaigns and the applications start coming in. You handle interviews — we handle everything that gets drivers to that point.</p>
+        </div>
+      </div>
+      <div class="step">
+        <p class="step-num">Step 04</p>
+        <div class="step-body">
+          <h3>Optimize & Scale</h3>
+          <p>Every month we review what's working and double down. Lower cost-per-hire, higher application quality — consistently improving over time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="section" style="border-top: 1px solid var(--border)">
+  <div class="container">
+    <p class="t-label">Who It's For</p>
+    <h2>Built for trucking<br /><em>companies like yours.</em></h2>
+
+    <div class="for-grid">
+      <div class="for-card">
+        <h3>Owner-Operators Growing a Fleet</h3>
+        <p>You've got 5–20 trucks and can't afford to have seats empty. You need a reliable pipeline of drivers without spending all day on job boards.</p>
+      </div>
+      <div class="for-card">
+        <h3>Mid-Size Carriers with High Turnover</h3>
+        <p>Driver turnover is constant. You need a system that's always running — not a one-time hiring push that fades out after 60 days.</p>
+      </div>
+      <div class="for-card">
+        <h3>Dispatch Companies Scaling Fast</h3>
+        <p>You're adding clients faster than you can find drivers. You need volume and quality — applicants who actually show up and pass onboarding.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <p class="t-label">Ready to Start?</p>
+    <h2>Get your free<br /><em>driver acquisition audit.</em></h2>
+    <p>We'll review your current hiring process, identify the biggest gaps, and show you exactly what a system would look like for your company. No cost. No commitment.</p>
+    <a href="/#contact" class="btn-primary" style="font-size:16px; padding:16px 36px;">
+      Book Free Strategy Call
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Nevio Lab. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
