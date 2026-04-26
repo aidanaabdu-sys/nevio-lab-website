@@ -188,9 +188,24 @@
     footer { padding: 40px; margin-top: 80px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: center; }
     footer p { font-size: 13px; color: var(--text-3); }
 
+    /* ── MOBILE MENU ── */
+    .mobile-nav-controls { display: none; align-items: center; }
+    .hamburger { width: 36px; height: 36px; background: none; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; padding: 0; color: var(--text); }
+    .hamburger span { display: block; width: 16px; height: 1.5px; background: currentColor; border-radius: 2px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .mobile-menu { position: fixed; inset: 0; z-index: 999; background: var(--bg); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-menu-nav { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0 40px; }
+    .mobile-menu-link { font-size: clamp(28px, 8vw, 48px); font-weight: 300; letter-spacing: -0.03em; color: var(--text-2); text-align: center; padding: 12px 0; width: 100%; text-decoration: none; transition: color 0.2s ease; }
+    .mobile-menu-link:hover { color: var(--text); }
+    .mobile-menu-cta { margin-top: 24px; font-size: 16px; font-weight: 500; letter-spacing: 0; background: var(--orange); color: #fff !important; padding: 14px 36px; border-radius: 100px; width: auto; }
+
     @media (max-width: 768px) {
       header { padding: 0 20px; }
-      nav a:not(.nav-cta) { display: none; }
+      nav { display: none; }
+      .mobile-nav-controls { display: flex; }
       .article-wrap, .breadcrumb { padding-left: 20px; padding-right: 20px; }
       .cta-box { padding: 32px 24px; }
     }
@@ -213,8 +228,24 @@
       <a href="/#why">About</a>
       <a href="/#contact" class="nav-cta">Free Strategy Call</a>
     </nav>
+    <div class="mobile-nav-controls">
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
 </header>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <nav class="mobile-menu-nav">
+    <a href="/" class="mobile-menu-link">Home</a>
+    <a href="/#services" class="mobile-menu-link">Services</a>
+    <a href="/#process" class="mobile-menu-link">Process</a>
+    <a href="/#why" class="mobile-menu-link">About</a>
+    <a href="/blog" class="mobile-menu-link">Blog</a>
+    <a href="/#contact" class="mobile-menu-link mobile-menu-cta">Free Strategy Call</a>
+  </nav>
+</div>
 
 <div class="breadcrumb">
   <a href="/">Home</a>
@@ -382,6 +413,14 @@
   window.addEventListener('scroll', () => {
     header.classList.toggle('scrolled', window.scrollY > 10);
   }, { passive: true });
+
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const mobileLinks = mobileMenu.querySelectorAll('.mobile-menu-link');
+  function openMenu() { hamburger.classList.add('open'); hamburger.setAttribute('aria-expanded','true'); mobileMenu.classList.add('open'); mobileMenu.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+  function closeMenu() { hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded','false'); mobileMenu.classList.remove('open'); mobileMenu.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  hamburger.addEventListener('click', () => { mobileMenu.classList.contains('open') ? closeMenu() : openMenu(); });
+  mobileLinks.forEach(l => l.addEventListener('click', closeMenu));
 </script>
 </body>
 </html>
