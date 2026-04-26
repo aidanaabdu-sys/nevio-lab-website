@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Real Cost of an Empty Truck: What Driver Turnover Is Actually Costing You — Nevio Lab</title>
+  <meta name="description" content="Most trucking companies underestimate the true cost of driver turnover. We break down the full math — lost revenue, recruiting costs, and the compounding effect of chronic vacancies." />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="canonical" href="https://neviolab.com/blog/the-real-cost-of-an-empty-truck" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://neviolab.com/blog/the-real-cost-of-an-empty-truck" />
+  <meta property="og:title" content="The Real Cost of an Empty Truck: What Driver Turnover Is Actually Costing You — Nevio Lab" />
+  <meta property="og:description" content="Most trucking companies underestimate the true cost of driver turnover. We break down the full math — lost revenue, recruiting costs, and the compounding effect of chronic vacancies." />
+  <meta property="og:image" content="https://neviolab.com/og-image.png" />
+
+  <!-- Breadcrumb Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://neviolab.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://neviolab.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": "The Real Cost of an Empty Truck" }
+    ]
+  }
+  </script>
+
+  <!-- Article Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Real Cost of an Empty Truck: What Driver Turnover Is Actually Costing You",
+    "description": "Most trucking companies underestimate the true cost of driver turnover. We break down the full math — lost revenue, recruiting costs, and the compounding effect of chronic vacancies.",
+    "author": {
+      "@type": "Organization",
+      "name": "Nevio Lab",
+      "url": "https://neviolab.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nevio Lab",
+      "url": "https://neviolab.com"
+    },
+    "datePublished": "2026-05-02",
+    "dateModified": "2026-05-02",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://neviolab.com/blog/the-real-cost-of-an-empty-truck"
+    }
+  }
+  </script>
+
+  <!-- Instant theme: runs before paint -->
+  <script>
+    (function() {
+      var lock = localStorage.getItem('nevio-theme-lock');
+      if (lock === 'light') { document.documentElement.classList.add('light'); return; }
+      if (lock === 'dark') { return; }
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        document.documentElement.classList.add('light');
+      }
+    })();
+  </script>
+
+  <!-- Resource hints -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" /></noscript>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F0861B;
+      --bg: #0a0a0a;
+      --text: #ffffff;
+      --text-2: rgba(255,255,255,0.62);
+      --text-3: rgba(255,255,255,0.42);
+      --border: rgba(255,255,255,0.08);
+      --surface: rgba(255,255,255,0.04);
+    }
+
+    html.light {
+      --bg: #F2EFEB;
+      --text: #0a0a0a;
+      --text-2: rgba(0,0,0,0.62);
+      --text-3: rgba(0,0,0,0.40);
+      --border: rgba(0,0,0,0.09);
+      --surface: rgba(0,0,0,0.04);
+      --orange: #D4740F;
+    }
+
+    html { transition: background-color 1.2s ease; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 64px; display: flex; align-items: center;
+      transition: background 0.5s, border-color 0.5s;
+    }
+    header.scrolled {
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+    }
+    html.light header.scrolled { background: rgba(242,239,235,0.82); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .logo-mark { width: 28px; height: 28px; }
+    .logo-name { font-size: 16px; font-weight: 500; letter-spacing: -0.02em; }
+    .logo-name span { color: var(--orange); }
+    nav { display: flex; align-items: center; gap: 4px; }
+    nav a { text-decoration: none; color: var(--text-2); font-size: 14px; font-weight: 400; padding: 8px 14px; border-radius: 8px; transition: color 0.2s; }
+    nav a:hover { color: var(--text); }
+    .nav-cta { background: var(--orange); color: #fff !important; padding: 8px 18px !important; border-radius: 8px; font-weight: 500 !important; transition: opacity 0.2s !important; }
+    .nav-cta:hover { opacity: 0.88 !important; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+    .article-wrap { max-width: 720px; margin: 0 auto; padding: 0 40px; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      font-size: 13px; color: var(--text-3);
+      display: flex; align-items: center; gap: 8px;
+      padding-top: 100px; padding-bottom: 48px;
+      max-width: 720px; margin: 0 auto; padding-left: 40px; padding-right: 40px;
+    }
+    .breadcrumb a { color: var(--text-3); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--text-2); }
+
+    /* ── ARTICLE HEADER ── */
+    .article-header { margin-bottom: 64px; }
+    .article-meta {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 24px; flex-wrap: wrap;
+    }
+    .article-tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--orange); background: rgba(240,134,27,0.1);
+      padding: 4px 12px; border-radius: 100px;
+    }
+    .article-date { font-size: 13px; color: var(--text-3); }
+    .article-read { font-size: 13px; color: var(--text-3); }
+    .article-header h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 600; line-height: 1.1; letter-spacing: -2px;
+      margin-bottom: 24px;
+    }
+    .article-header h1 em { font-style: normal; color: var(--orange); }
+    .article-intro {
+      font-size: 19px; font-weight: 300; color: var(--text-2);
+      line-height: 1.7; border-left: 2px solid var(--orange);
+      padding-left: 20px;
+    }
+
+    /* ── ARTICLE BODY ── */
+    .article-body { font-size: 16px; line-height: 1.8; color: var(--text-2); }
+
+    .article-body h2 {
+      font-size: clamp(22px, 3vw, 30px);
+      font-weight: 600; letter-spacing: -0.8px; line-height: 1.2;
+      color: var(--text); margin-top: 60px; margin-bottom: 20px;
+    }
+
+    .article-body p { margin-bottom: 24px; }
+
+    .article-body strong { color: var(--text); font-weight: 500; }
+
+    .article-body ul, .article-body ol {
+      padding-left: 24px; margin-bottom: 24px;
+    }
+    .article-body li { margin-bottom: 10px; }
+
+    /* ── STAT CALLOUT ── */
+    .stat-callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      padding: 28px 32px;
+      margin: 40px 0;
+    }
+    .stat-callout .stat-num {
+      font-size: 48px; font-weight: 600; letter-spacing: -2px;
+      color: var(--orange); line-height: 1; margin-bottom: 8px;
+    }
+    .stat-callout .stat-label { font-size: 15px; color: var(--text-2); line-height: 1.5; }
+
+    /* ── STAT GRID ── */
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 2px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 16px;
+      overflow: hidden; margin: 40px 0;
+    }
+    .stat-box { background: var(--bg); padding: 28px 24px; }
+    .stat-box .num { font-size: 36px; font-weight: 600; letter-spacing: -1.5px; color: var(--orange); margin-bottom: 6px; }
+    .stat-box .label { font-size: 13px; color: var(--text-2); line-height: 1.4; }
+
+    /* ── PULL QUOTE ── */
+    .pull-quote {
+      font-size: 22px; font-weight: 300; font-style: italic;
+      color: var(--text); line-height: 1.5;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 0; margin: 48px 0;
+    }
+
+    /* ── NUMBERED LIST STYLED ── */
+    .styled-list { list-style: none; padding: 0; margin: 32px 0; }
+    .styled-list li {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+      margin: 0;
+    }
+    .styled-list li:last-child { border-bottom: none; }
+    .styled-list .li-num {
+      font-size: 12px; font-weight: 500; letter-spacing: 1px;
+      color: var(--orange); min-width: 28px; padding-top: 2px;
+    }
+    .styled-list .li-body h4 { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+    .styled-list .li-body p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin: 0; }
+
+    /* ── SOURCES ── */
+    .sources {
+      margin-top: 72px; padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .sources h3 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 20px; }
+    .sources ul { list-style: none; padding: 0; }
+    .sources ul li { font-size: 13px; color: var(--text-3); padding: 6px 0; border-bottom: 1px solid var(--border); margin: 0; }
+    .sources ul li:last-child { border-bottom: none; }
+
+    /* ── CTA BOX ── */
+    .cta-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; padding: 48px 40px;
+      text-align: center; margin-top: 72px;
+    }
+    .cta-box .t-label { font-size: 11px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+    .cta-box h3 { font-size: clamp(24px, 3vw, 36px); font-weight: 600; letter-spacing: -1px; margin-bottom: 12px; }
+    .cta-box h3 em { font-style: normal; color: var(--orange); }
+    .cta-box p { font-size: 15px; color: var(--text-2); margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--orange); color: #fff;
+      padding: 14px 28px; border-radius: 100px;
+      font-size: 15px; font-weight: 500; text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px; margin-top: 80px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    footer p { font-size: 13px; color: var(--text-3); }
+
+    @media (max-width: 768px) {
+      header { padding: 0 20px; }
+      nav a:not(.nav-cta) { display: none; }
+      .article-wrap, .breadcrumb { padding-left: 20px; padding-right: 20px; }
+      .stat-grid { grid-template-columns: 1fr; }
+      .cta-box { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <svg class="logo-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+        <ellipse cx="16" cy="16" rx="13" ry="7" stroke="currentColor" stroke-width="2" transform="rotate(-20 16 16)"/>
+        <path d="M16 5 Q16 16 25 16 Q16 16 16 27 Q16 16 7 16 Q16 16 16 5 Z" fill="#F0861B"/>
+      </svg>
+      <span class="logo-name">nevio<span>lab</span></span>
+    </a>
+    <nav>
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/#why">About</a>
+      <a href="/#contact" class="nav-cta">Free Strategy Call</a>
+    </nav>
+  </div>
+</header>
+
+<div class="breadcrumb">
+  <a href="/">Home</a>
+  <span>/</span>
+  <a href="/blog">Blog</a>
+  <span>/</span>
+  <span>The Real Cost of an Empty Truck</span>
+</div>
+
+<article class="article-wrap">
+
+  <!-- HEADER -->
+  <div class="article-header">
+    <div class="article-meta">
+      <span class="article-tag">Operations</span>
+      <span class="article-date">May 2, 2026</span>
+      <span class="article-read">7 min read</span>
+    </div>
+    <h1>The Real Cost of an Empty Truck: <em>What Driver Turnover Is Actually Costing You</em></h1>
+    <p class="article-intro">Most carriers track what they spend to replace a driver. Almost none track what they lose while the seat is empty. The full number is significantly larger — and it compounds.</p>
+  </div>
+
+  <!-- BODY -->
+  <div class="article-body">
+
+    <h2>The number carriers quote is only half the story</h2>
+
+    <p>When trucking company owners think about the cost of driver turnover, they usually think about recruiting: the job board fees, the time spent screening, maybe an orientation stipend. A few thousand dollars, they figure, give or take.</p>
+
+    <p>That number is real — but it captures only the cost of filling the seat. It doesn't capture what the empty seat costs while it's empty. And for most carriers running on tight margins, that second number is far more damaging than the first.</p>
+
+    <p>Research from the <strong>Upper Great Plains Transportation Institute at North Dakota State University</strong> put the average cost to recruit and onboard a single truck driver at <strong>$8,234</strong> in 2019. Adjusted for inflation and tighter labor markets, estimates in 2024 consistently land between <strong>$10,000 and $12,000</strong>. That's the visible cost — the one that hits your accounts payable.</p>
+
+    <p>The invisible cost — lost revenue from an idle truck — doesn't show up anywhere. But it's larger.</p>
+
+    <h2>The math on a single empty seat</h2>
+
+    <p>A dry van truckload carrier running regional lanes in 2024 can reasonably expect a truck to generate <strong>$180,000 to $220,000 in annual gross revenue</strong> when fully utilized, based on industry averages from the American Transportation Research Institute (ATRI). That works out to roughly <strong>$3,500 to $4,200 per week per truck</strong>.</p>
+
+    <p>A typical driver vacancy — from the day a driver gives notice to the day a replacement is hired, oriented, and fully productive — runs between <strong>4 and 8 weeks</strong> for small carriers without a full-time recruiter. Six weeks is a reasonable midpoint.</p>
+
+    <div class="stat-callout">
+      <div class="stat-num">$22,000+</div>
+      <p class="stat-label">Conservative estimate of total cost per driver departure: ~$11,000 in replacement costs + ~$11,000 in lost revenue during a 3-week vacancy. At 6 weeks idle, the revenue loss alone exceeds $22,000.</p>
+    </div>
+
+    <p>Six weeks of vacancy at $3,800/week in lost revenue is <strong>$22,800</strong> — before you've spent a dollar on recruiting. Add $11,000 in replacement costs and a single driver departure costs a small carrier somewhere between <strong>$30,000 and $35,000</strong> in combined lost revenue and direct expense.</p>
+
+    <p>For a 10-truck carrier losing 3 drivers a year — which is modest given industry turnover rates — that's a $90,000 to $105,000 annual drag on the business. For a carrier losing 5 or 6 drivers a year, it's a six-figure problem that compounds every year it goes unaddressed.</p>
+
+    <h2>Why the vacancy window is longer than carriers expect</h2>
+
+    <p>Most owners assume they can fill a seat in two to three weeks. In practice, the timeline almost always stretches — and the gap between expectation and reality is where the money gets lost.</p>
+
+    <ul class="styled-list">
+      <li>
+        <span class="li-num">01</span>
+        <div class="li-body">
+          <h4>Notice lag</h4>
+          <p>Drivers rarely give more than a week's notice, and many don't give any at all. By the time recruiting starts, the truck is already idle or being covered at a premium by owner-operators.</p>
+        </div>
+      </li>
+      <li>
+        <span class="li-num">02</span>
+        <div class="li-body">
+          <h4>Application volume is low</h4>
+          <p>Carriers without an active recruiting presence don't have a pipeline. They start from zero: posting a job, waiting for applications, screening, and scheduling — all while the truck sits.</p>
+        </div>
+      </li>
+      <li>
+        <span class="li-num">03</span>
+        <div class="li-body">
+          <h4>MVR and background check delays</h4>
+          <p>DOT-required checks take time. A qualified applicant can be identified and still not behind the wheel for 7 to 14 days after accepting an offer.</p>
+        </div>
+      </li>
+      <li>
+        <span class="li-num">04</span>
+        <div class="li-body">
+          <h4>Onboarding and ramp-up</h4>
+          <p>A new driver at a new carrier typically runs at 80–90% of normal productivity for the first two to four weeks while they learn the routes, equipment preferences, and dispatch relationships.</p>
+        </div>
+      </li>
+    </ul>
+
+    <p>Each of these stages adds days or weeks to the vacancy window. The carriers that minimize the damage are the ones with a pipeline of warm candidates before a seat opens — not a job board login they dust off when someone quits.</p>
+
+    <h2>The compounding effect carriers don't model</h2>
+
+    <p>A single driver departure is expensive. Multiple departures in a year create a compounding problem that goes beyond the arithmetic.</p>
+
+    <p>When turnover is chronic, it:</p>
+
+    <ul>
+      <li><strong>Burns out remaining drivers.</strong> When one seat is empty, existing drivers get asked to cover extra loads. Over time, that pressure accelerates their own departures.</li>
+      <li><strong>Degrades customer relationships.</strong> Missed pickups, inconsistent service, and last-minute coverage requests erode trust with shippers and brokers. Lost freight relationships are hard to rebuild.</li>
+      <li><strong>Raises your cost-per-mile.</strong> A carrier running at 85% capacity has the same fixed costs — insurance, truck payments, overhead — spread across fewer revenue miles. The math gets worse fast.</li>
+      <li><strong>Increases owner time cost.</strong> Every vacancy is owner hours spent on hiring instead of operations. For most small carriers, the owner's time is the scarcest resource in the business.</li>
+    </ul>
+
+    <p class="pull-quote">"Turnover isn't a people problem. It's a revenue problem — and most carriers aren't measuring it that way."</p>
+
+    <p>The <strong>American Transportation Research Institute's annual Operational Costs of Trucking report</strong> consistently identifies driver wages and turnover-related costs as the single largest controllable expense category for truckload carriers. Yet most small carriers have no system for tracking their actual cost-per-departure or their average vacancy length.</p>
+
+    <h2>What the numbers tell you about where to invest</h2>
+
+    <p>Once you've done the math on what a single departure costs, the return on investment calculus for driver retention and proactive recruiting changes dramatically.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="num">$32K</div>
+        <p class="label">Average total cost per driver departure (recruiting + 5-week vacancy revenue loss)</p>
+      </div>
+      <div class="stat-box">
+        <div class="num">3–4x</div>
+        <p class="label">ROI of preventing one departure vs. the cost of proactive retention and recruiting efforts</p>
+      </div>
+      <div class="stat-box">
+        <div class="num">89%</div>
+        <p class="label">Annual turnover rate at large truckload carriers (ATA) — the benchmark small carriers are measured against</p>
+      </div>
+    </div>
+
+    <p>A carrier spending $2,000 to $3,000 per month on consistent driver recruiting ads — building visibility, generating applicants, and keeping a warm pipeline — is spending roughly $24,000 to $36,000 per year. If that spend prevents even one departure that would otherwise cost $30,000+, the program pays for itself. If it prevents two or three, it's one of the best investments in the business.</p>
+
+    <p>The same math applies to retention. A driver who stays for three years instead of one generates triple the revenue value and costs nothing in replacement. Small improvements in retention — better communication, more predictable schedules, faster issue resolution — have an outsized financial impact when measured against the true cost of departure.</p>
+
+    <h2>How to calculate your own number</h2>
+
+    <p>Every carrier's math is slightly different based on freight type, lane density, and local labor market. But you can build a reasonable estimate with four inputs:</p>
+
+    <ol>
+      <li><strong>Average weekly revenue per truck</strong> — divide your annual gross by your number of trucks and then by 52</li>
+      <li><strong>Average vacancy length</strong> — track from last day worked to first fully productive day for your last 3 departures</li>
+      <li><strong>Direct replacement cost</strong> — job board fees, sign-on bonus, orientation, background checks, lost dispatcher time</li>
+      <li><strong>Annual departure rate</strong> — number of drivers who left in the past 12 months divided by your total driver count</li>
+    </ol>
+
+    <p>Multiply (1) by (2) to get lost revenue per departure. Add (3) for total cost per departure. Multiply by your annualized (4) to get your annual turnover cost. Most carriers who do this math for the first time are surprised by the result.</p>
+
+    <p>The carriers that take it seriously — that treat driver retention and proactive recruiting as revenue strategy rather than HR overhead — are the ones that end up winning the decade of driver scarcity ahead.</p>
+
+    <!-- SOURCES -->
+    <div class="sources">
+      <h3>Sources</h3>
+      <ul>
+        <li>Upper Great Plains Transportation Institute, NDSU — <em>Cost of Truck Driver Turnover</em></li>
+        <li>American Transportation Research Institute — <em>Operational Costs of Trucking (annual)</em></li>
+        <li>American Trucking Associations — <em>Trucking Activity Report (quarterly)</em></li>
+        <li>FMCSA — <em>Driver qualification and onboarding requirements</em></li>
+      </ul>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <p class="t-label">Nevio Lab</p>
+      <h3>Find out what turnover is <em>actually costing you.</em></h3>
+      <p>We audit trucking companies' driver acquisition and retention setups for free — and show you exactly where the leaks are before they become a six-figure problem.</p>
+      <a href="/#contact" class="btn-primary">
+        Get a Free Recruiting Audit
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</article>
+
+<footer>
+  <p>© 2026 Nevio Lab. All rights reserved.</p>
+</footer>
+
+<script>
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+</script>
+</body>
+</html>
