@@ -55,6 +55,56 @@
   }
   </script>
 
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the true cost of driver turnover for a trucking company?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The true cost includes both direct recruiting expenses and lost revenue from an idle truck. At a typical vacancy length of 6 weeks and $3,800 per week in lost revenue, a single driver departure costs $22,800 in lost revenue alone — plus $10,000–$12,000 in recruiting and onboarding costs, for a combined total of $30,000–$35,000 per departure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does it typically take to fill a driver vacancy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For small carriers without a dedicated recruiter, filling a driver vacancy typically takes 4 to 8 weeks from the day a driver gives notice to the day a replacement is fully productive. Six weeks is a common midpoint when accounting for advertising, screening, background and MVR checks, and the productivity ramp-up period."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much revenue does an empty truck cost per week?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Based on American Transportation Research Institute (ATRI) industry averages, a fully-utilized dry van regional carrier generates $180,000–$220,000 in annual gross revenue per truck, or approximately $3,500–$4,200 per week per truck. An empty truck generates zero revenue while fixed costs — insurance, truck payments, overhead — continue."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the average cost to recruit a CDL driver?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Research from the Upper Great Plains Transportation Institute at North Dakota State University put the average CDL driver recruiting and onboarding cost at $8,234 in 2019. Adjusted for inflation and current labor market conditions, 2024 estimates consistently land between $10,000 and $12,000 per driver hired."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I calculate my trucking company's driver turnover cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Multiply your average weekly revenue per truck by your average vacancy length in weeks to get lost revenue per departure. Add your direct recruiting costs (advertising, screening, orientation). Multiply that combined total by your annual number of departures to get your total annual turnover cost. Most carriers who run this math for the first time are surprised by the result."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Instant theme: runs before paint -->
   <script>
     (function() {
@@ -474,6 +524,47 @@
     <p>Multiply (1) by (2) to get lost revenue per departure. Add (3) for total cost per departure. Multiply by your annualized (4) to get your annual turnover cost. Most carriers who do this math for the first time are surprised by the result.</p>
 
     <p>The carriers that take it seriously — that treat driver retention and proactive recruiting as revenue strategy rather than HR overhead — are the ones that end up winning the decade of driver scarcity ahead.</p>
+
+    <!-- FAQ SECTION -->
+    <style>
+    .faq-section { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 28px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary { font-size: 16px; font-weight: 600; color: var(--text); padding: 20px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 22px; font-weight: 300; color: var(--text-3); flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item .faq-answer { font-size: 15px; color: var(--text-2); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+    </style>
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>What is the true cost of driver turnover for a trucking company?</summary>
+        <p class="faq-answer">The true cost has two parts: direct recruiting expenses and lost revenue from an idle truck. At a typical vacancy length of 6 weeks and ~$3,800 per week in lost revenue, a single departure costs around $22,800 in lost revenue — plus $10,000–$12,000 in recruiting costs, for a combined total of $30,000–$35,000 per driver who leaves.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How long does it typically take to fill a driver vacancy?</summary>
+        <p class="faq-answer">For small carriers without a dedicated recruiter, filling a seat typically takes 4 to 8 weeks from the day a driver gives notice to the day a replacement is fully productive. Six weeks is a common midpoint when you account for posting, screening, background and MVR checks, orientation, and the 2–4 week productivity ramp-up period for a new driver.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How much revenue does an empty truck cost per week?</summary>
+        <p class="faq-answer">Based on American Transportation Research Institute (ATRI) industry averages, a fully-utilized dry van regional carrier generates $180,000–$220,000 in annual gross revenue per truck — approximately $3,500–$4,200 per week. An empty truck generates zero revenue while fixed costs (insurance, truck payments, overhead) continue unchanged.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the average cost to recruit a CDL driver?</summary>
+        <p class="faq-answer">Research from the Upper Great Plains Transportation Institute at North Dakota State University put the average CDL driver recruiting and onboarding cost at $8,234 in 2019. Adjusted for inflation and tighter labor markets, 2024 estimates consistently land between $10,000 and $12,000 per driver hired — covering advertising, screening, orientation, and training.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I calculate my trucking company's driver turnover cost?</summary>
+        <p class="faq-answer">Start with four numbers: (1) average weekly revenue per truck, (2) average vacancy length in weeks, (3) direct recruiting cost per hire, and (4) number of departures per year. Multiply (1) × (2) to get lost revenue per departure. Add (3) for total cost per departure. Multiply by (4) to get your annual turnover cost. Most carriers who run this calculation for the first time are surprised by how large the number is.</p>
+      </details>
+    </div>
 
     <!-- SOURCES -->
     <div class="sources">

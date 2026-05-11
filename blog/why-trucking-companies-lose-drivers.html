@@ -55,6 +55,56 @@
   }
   </script>
 
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the average driver turnover rate in trucking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "According to the American Trucking Associations' Trucking Activity Report, annual driver turnover at large truckload carriers consistently runs between 89% and 97%. At smaller carriers the figure is similar, though harder to track precisely due to limited HR infrastructure."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do truck drivers leave their carriers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A 2022 Workhound survey of over 100,000 truck drivers found that the top reasons for leaving were management and communication issues — not pay. Compensation ranked third. Drivers most often leave because they feel undervalued or poorly communicated with, not because a competitor offered more money."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does it cost to replace a truck driver?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Research from the Upper Great Plains Transportation Institute at North Dakota State University estimated the average cost to recruit and onboard a CDL driver at $8,234 (2019 data). Adjusted for current labor market conditions, most 2024 estimates land between $10,000 and $12,000 per driver replaced — not including lost revenue from the vacancy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where do CDL drivers look for jobs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "According to the Overdrive Magazine Annual Driver Survey, over 70% of commercial truck drivers use Facebook daily, making it the dominant platform for reaching active and passive candidates. Word of mouth, referrals, and industry-specific job boards also play a significant role."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can a small trucking company compete with large carriers for drivers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Small carriers can compete by building consistent visibility on Facebook and Instagram before seats open, collecting positive driver reviews, and clearly communicating specific advantages — home time, equipment quality, routes, and culture — through targeted ads that reach drivers in their operating region. Large carriers win on scale; small carriers can win on personal communication and responsiveness."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Instant theme: runs before paint -->
   <script>
     (function() {
@@ -509,6 +559,47 @@
     <p>For small carriers, the response can't be to wait for the industry to solve a structural problem. The carriers that survive the next decade of driver scarcity will be the ones that built a recruiting infrastructure now — before competition for a shrinking pool of drivers becomes even more intense.</p>
 
     <p>The good news: most of your direct competitors haven't built that infrastructure yet either. The window is still open.</p>
+
+    <!-- FAQ SECTION -->
+    <style>
+    .faq-section { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 28px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary { font-size: 16px; font-weight: 600; color: var(--text); padding: 20px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 22px; font-weight: 300; color: var(--text-3); flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item .faq-answer { font-size: 15px; color: var(--text-2); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+    </style>
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>What is the average driver turnover rate in trucking?</summary>
+        <p class="faq-answer">According to the American Trucking Associations' Trucking Activity Report, annual driver turnover at large truckload carriers consistently runs between 89% and 97%. At smaller carriers the figure is similar, though harder to track precisely. Nearly every driver at a large carrier leaves within a year and is replaced.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Why do truck drivers leave their carriers?</summary>
+        <p class="faq-answer">A 2022 Workhound survey of over 100,000 truck drivers found that management and communication issues were the top reasons for leaving — not pay. Compensation ranked third. Drivers most often leave because they feel the company doesn't value or communicate with them, not because a competitor offered a few more cents per mile.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How much does it cost to replace a truck driver?</summary>
+        <p class="faq-answer">Research from the Upper Great Plains Transportation Institute at North Dakota State University estimated the average cost to recruit and onboard a CDL driver at $8,234 (2019). Adjusted for current labor market conditions, 2024 estimates consistently land between $10,000 and $12,000 per driver — not counting the lost revenue from the vacancy itself, which typically adds another $15,000–$23,000.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Where do CDL drivers look for jobs?</summary>
+        <p class="faq-answer">According to the Overdrive Magazine Annual Driver Survey, over 70% of commercial truck drivers use Facebook daily, making it the most effective platform for reaching both active and passive candidates. Word of mouth, driver referrals, and industry-specific boards also play a significant role — particularly for experienced drivers who aren't actively browsing job listings.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How can a small trucking company compete with large carriers for drivers?</summary>
+        <p class="faq-answer">Small carriers can compete effectively by building consistent visibility on Facebook and Instagram before seats open, collecting positive driver reviews on Google and Indeed, and communicating specific advantages — home time, equipment quality, specific lanes — through targeted ads that reach drivers in their operating region. Large carriers win on brand recognition; small carriers can win on personal communication and faster response.</p>
+      </details>
+    </div>
 
     <!-- SOURCES -->
     <div class="sources">

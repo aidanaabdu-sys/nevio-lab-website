@@ -55,6 +55,56 @@
   }
   </script>
 
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the average cost-per-hire for a CDL truck driver?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "According to the Society for Human Resource Management (SHRM), the average cost-per-hire across all US industries is approximately $4,700. In trucking, industry estimates consistently put the figure between $8,000 and $12,000 for CDL drivers when accounting for the full recruiting cycle, orientation, and productivity ramp-up."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can trucking companies reduce cost-per-hire?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The most effective methods include: building a consistent recruiting presence on Facebook and Instagram before seats open, developing a driver referral program, optimizing the recruiting landing page for mobile (over 60% of trucking applications come from mobile devices, per Indeed's Hiring Lab), responding to applicants within 24 hours, and tracking which channels produce actual hires so you can cut what isn't working."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Do driver referral programs lower cost-per-hire in trucking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. According to SHRM research, referral hires stay 25–40% longer than hires sourced from job boards, and typically come in at a lower cost-per-hire. In trucking, referred drivers arrive pre-sold on company culture and fit, which also reduces first-90-day departures."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How quickly should trucking companies respond to driver applicants?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Research from Indeed's Hiring Lab found that candidates who receive a response within 24 hours are 3x more likely to complete the hiring process than those who wait longer. In trucking, where qualified drivers are often talking to multiple carriers simultaneously, response time frequently determines who gets the hire."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the cheapest way to recruit CDL drivers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Driver referrals are typically the lowest cost-per-hire channel and produce the highest-quality, longest-tenured hires. Beyond referrals, consistent paid social advertising on Facebook and Instagram — even at $500–$1,500 per month — produces a lower long-term cost-per-hire than reactive job board spending, because it builds a warm audience of drivers before seats open."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Instant theme: runs before paint -->
   <script>
     (function() {
@@ -385,6 +435,47 @@
     <p class="pull-quote">"The carriers with the lowest cost-per-hire aren't the ones spending the least — they're the ones who know exactly what's working."</p>
 
     <p>A <a href="/services/driver-acquisition">systematic driver acquisition approach</a> — consistent presence, owned channels, fast follow-up, and referral infrastructure — can reduce CPH by 40–60% compared to pure job board dependency, based on the carriers we've worked with. The investment is modest. The compounding benefit over time is significant.</p>
+
+    <!-- FAQ SECTION -->
+    <style>
+    .faq-section { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 28px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary { font-size: 16px; font-weight: 600; color: var(--text); padding: 20px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 22px; font-weight: 300; color: var(--text-3); flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item .faq-answer { font-size: 15px; color: var(--text-2); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+    </style>
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>What is the average cost-per-hire for a CDL truck driver?</summary>
+        <p class="faq-answer">According to the Society for Human Resource Management (SHRM), the average cost-per-hire across all US industries is approximately $4,700. In trucking, it's higher — industry estimates consistently put the figure between $8,000 and $12,000 for CDL drivers when you factor in the full recruiting cycle, orientation, and productivity ramp-up period.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How can trucking companies reduce cost-per-hire?</summary>
+        <p class="faq-answer">The most effective methods: build a consistent recruiting presence on Facebook and Instagram before seats open, launch a driver referral program, optimize your recruiting landing page for mobile (over 60% of trucking applications come from mobile, per Indeed's Hiring Lab), respond to applicants within 24 hours, and track which channels actually produce hires so you can stop spending on what doesn't work.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do driver referral programs lower cost-per-hire in trucking?</summary>
+        <p class="faq-answer">Yes. According to SHRM research, referral hires stay 25–40% longer than hires from job boards, and typically come in at a lower cost-per-hire. In trucking, referred drivers arrive pre-sold on company culture and fit, which also significantly reduces early-tenure departures during the high-risk first 90 days.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How quickly should trucking companies respond to driver applicants?</summary>
+        <p class="faq-answer">Research from Indeed's Hiring Lab found that candidates who receive a response within 24 hours are 3x more likely to complete the hiring process than those who wait longer. In trucking, where a qualified driver may be in conversations with multiple carriers simultaneously, response speed frequently determines who gets the hire — not the higher pay rate.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the cheapest way to recruit CDL drivers?</summary>
+        <p class="faq-answer">Driver referrals are typically the lowest cost-per-hire channel and produce the highest-quality, longest-tenured hires. Beyond referrals, consistent paid social advertising on Facebook and Instagram — at $500–$1,500 per month — produces a lower long-term cost-per-hire than reactive job board spending because it builds a warm candidate audience before seats open rather than starting from scratch each time.</p>
+      </details>
+    </div>
 
     <!-- SOURCES -->
     <div class="sources">

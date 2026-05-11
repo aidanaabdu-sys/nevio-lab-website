@@ -55,6 +55,56 @@
   }
   </script>
 
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Do Facebook ads work for recruiting CDL truck drivers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. According to the Overdrive Magazine Annual Driver Survey, over 70% of commercial truck drivers use Facebook daily, making it the most effective social platform for reaching this audience. Large carriers like Werner Enterprises, Knight-Swift, and Schneider run continuous Facebook and Instagram recruiting campaigns because of this driver concentration."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much should a trucking company spend on Facebook recruiting ads?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A realistic starting budget for a small carrier running regional driver recruiting campaigns is $800–$1,500 per month. This is enough to build audience awareness, test ad creative, and generate a steady flow of applicants. Below $500 per month, the algorithm typically does not have enough data to optimize effectively."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I target CDL drivers on Facebook?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Target by geographic area (the counties and metro areas where your lanes run), job title (truck driver, CDL driver, owner operator), and industry-specific interests such as Overdrive Magazine, CDL Life, and Truckers Report. Exclude current employees using Meta's Custom Audiences feature to avoid wasting budget on your own drivers."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What type of Facebook ad works best for truck driver recruiting?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Video ads showing real trucks, real routes, and specific pay information consistently outperform static image ads for driver recruiting. Specificity converts — ads that state exact pay rates (e.g., '$0.62 CPM starting, $0.67 at 6 months') outperform vague claims like 'competitive pay.' Short-form video between 15 and 45 seconds performs best on mobile."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long should I run Facebook ads before judging results?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Run your first driver recruiting campaign for at least 30 days before making major changes. Meta's algorithm needs time to optimize delivery, and driver recruiting has a longer consideration cycle than most consumer decisions. Track cost-per-lead and how many leads converted to actual applicants and hires — cost-per-hire is the metric that matters, not cost-per-click."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Instant theme: runs before paint -->
   <script>
     (function() {
@@ -376,6 +426,47 @@
     <p>Connect your Meta lead form to a CRM or a simple notification system that alerts you — or your dispatcher — the moment a lead comes in. Call within 2 hours during business hours. Text leads that come in outside business hours. The response speed alone will put you ahead of most carriers running ads in your area.</p>
 
     <p>Running Facebook ads is one piece of a complete <a href="/services/driver-acquisition">driver acquisition system</a> — the ads generate awareness and initial interest, but the landing page, follow-up process, and onboarding experience determine whether that interest becomes a hire and whether that hire stays.</p>
+
+    <!-- FAQ SECTION -->
+    <style>
+    .faq-section { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 28px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary { font-size: 16px; font-weight: 600; color: var(--text); padding: 20px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 22px; font-weight: 300; color: var(--text-3); flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item .faq-answer { font-size: 15px; color: var(--text-2); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+    </style>
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>Do Facebook ads work for recruiting CDL truck drivers?</summary>
+        <p class="faq-answer">Yes. According to the Overdrive Magazine Annual Driver Survey, over 70% of commercial truck drivers use Facebook daily — making it the most effective social platform for reaching this audience. Large carriers like Werner Enterprises, Knight-Swift, and Schneider run continuous Facebook and Instagram recruiting campaigns for exactly this reason.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How much should a trucking company spend on Facebook recruiting ads?</summary>
+        <p class="faq-answer">A realistic starting budget for a small carrier running regional driver recruiting is $800–$1,500 per month. This is enough to build audience awareness, test ad creative, and generate a steady flow of applicants. Below $500 per month, the algorithm typically doesn't have enough data to optimize effectively and results are inconsistent.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I target CDL drivers on Facebook?</summary>
+        <p class="faq-answer">Target by geography (the specific counties and metro areas where your lanes run), job title (truck driver, CDL driver, owner operator), and industry interests (Overdrive Magazine, CDL Life, Truckers Report, big rig communities). Use Meta's Custom Audiences to exclude your current drivers so you don't waste budget advertising to people already on your payroll.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What type of Facebook ad works best for truck driver recruiting?</summary>
+        <p class="faq-answer">Video ads showing real trucks, real routes, and specific pay figures consistently outperform static images. Specificity converts: ads stating exact pay rates (e.g., "$0.62 CPM starting, $0.67 at 6 months") outperform vague claims like "competitive pay." Short-form video between 15 and 45 seconds performs best on mobile, where the majority of drivers see your ads.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How long should I run Facebook ads before judging results?</summary>
+        <p class="faq-answer">Run your first driver recruiting campaign for at least 30 days before making major changes. Meta's algorithm needs time to learn who converts, and driver recruiting has a longer consideration cycle than most consumer decisions. Track cost-per-lead and conversion-to-applicant rate — not just cost-per-click. Cost-per-hire is ultimately what matters.</p>
+      </details>
+    </div>
 
     <!-- SOURCES -->
     <div class="sources">

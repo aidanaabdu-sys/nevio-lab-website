@@ -55,6 +55,56 @@
   }
   </script>
 
+  <!-- FAQPage Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What percentage of new truck drivers leave within the first year?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Industry data consistently shows that first-year voluntary turnover among new truck driver hires can be as high as 50%, with the highest-risk departure window being the first 90 days. Research from the University of Michigan Transportation Research Institute indicates that many of these early departures are rooted in expectation mismatches created during the recruiting process."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do new CDL drivers quit within 90 days?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The most common cause of first-90-day departures is a mismatch between what was promised during recruiting and what the driver experiences on the job — particularly around home time, routes, and dispatcher communication. When recruiters use vague or optimistic language to attract applicants, the resulting expectation gaps become the primary driver of early-tenure turnover."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does structured onboarding affect driver retention?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Research from SHRM found that employees who went through a structured onboarding program were 58% more likely to still be with the company after three years. In trucking, where a single driver departure can cost $30,000 or more in combined lost revenue and recruiting costs, the return on a deliberate 30-day onboarding process is significant."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the most effective truck driver retention strategy?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The highest-leverage retention strategy is accurate expectation-setting during recruiting. Carriers that clearly communicate home time, freight type, pay structure, and dispatcher communication style before a driver accepts an offer see dramatically lower first-90-day turnover than those that use vague or optimistic recruiting language."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does the hiring process affect driver retention?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The recruiting process creates the expectations that every future interaction gets measured against. When recruiting promises match the actual job, drivers stay. When they don't, drivers leave — typically within the first 90 days. Research from the University of Michigan Transportation Research Institute found that recruiter-driver trust gaps are among the strongest predictors of early-tenure turnover in trucking."
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Instant theme: runs before paint -->
   <script>
     (function() {
@@ -380,6 +430,47 @@
     <p>The carriers with the worst retention are often the ones running ads that overstate home time, rushing through hiring because a seat is empty, and skipping orientation details because they're pressed for time. Each of those shortcuts costs far more than it saves.</p>
 
     <p>Building a <a href="/services/driver-acquisition">driver acquisition system</a> that works long-term means connecting every piece — the ad, the landing page, the first conversation, the offer, the onboarding — into a single consistent experience. That consistency is what turns applicants into drivers, and drivers into tenure.</p>
+
+    <!-- FAQ SECTION -->
+    <style>
+    .faq-section { margin-top: 72px; padding-top: 40px; border-top: 1px solid var(--border); }
+    .faq-section h2 { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--text-3); margin-bottom: 28px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-item summary { font-size: 16px; font-weight: 600; color: var(--text); padding: 20px 0; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after { content: '+'; font-size: 22px; font-weight: 300; color: var(--text-3); flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item[open] summary::after { transform: rotate(45deg); }
+    .faq-item .faq-answer { font-size: 15px; color: var(--text-2); line-height: 1.7; padding-bottom: 20px; margin: 0; }
+    </style>
+    <div class="faq-section">
+      <h2>Frequently Asked Questions</h2>
+
+      <details class="faq-item">
+        <summary>What percentage of new truck drivers leave within the first year?</summary>
+        <p class="faq-answer">Industry data consistently shows that first-year voluntary turnover among new truck driver hires can be as high as 50%, with the highest-risk window being the first 90 days. Research from the University of Michigan Transportation Research Institute indicates many of these early departures trace back to expectation mismatches created during the recruiting process — not dissatisfaction with the job itself.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Why do new CDL drivers quit within 90 days?</summary>
+        <p class="faq-answer">The most common cause is a mismatch between what was promised during recruiting and what the driver experiences on the job — particularly around home time, routes, and dispatcher communication. When recruiters use vague or optimistic language to attract applicants, the resulting gap between expectation and reality becomes the primary driver of first-90-day turnover.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How does structured onboarding affect driver retention?</summary>
+        <p class="faq-answer">SHRM research found that employees who went through a structured onboarding program were 58% more likely to still be with the company after three years. In trucking, where a single driver departure can cost $30,000 or more in combined lost revenue and recruiting expense, the return on a deliberate 30-day onboarding process is decisive.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What is the most effective truck driver retention strategy?</summary>
+        <p class="faq-answer">The highest-leverage retention strategy is accurate expectation-setting before the offer is accepted. Carriers that clearly communicate home time schedules, freight type, pay structure, and how dispatch works before a driver accepts see dramatically lower first-90-day turnover than those using vague or optimistic recruiting language. Retention starts in the recruiting conversation, not after day one.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>How does the hiring process affect driver retention?</summary>
+        <p class="faq-answer">The recruiting process creates the expectations every future interaction gets measured against. When promises match reality, drivers stay. When they don't, drivers leave — typically within 90 days. University of Michigan Transportation Research Institute studies found recruiter-driver trust gaps among the strongest predictors of early-tenure turnover in trucking. Treating recruiting and retention as one system, not two separate functions, is the shift that changes long-term tenure outcomes.</p>
+      </details>
+    </div>
 
     <!-- SOURCES -->
     <div class="sources">
